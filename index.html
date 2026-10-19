@@ -1,0 +1,854 @@
+<!doctype html><html><head><meta name="robots" content="noindex,nofollow"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Emballagemappen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@400;500;600&display=swap">
+<style>
+/* Layout: app-skal – sidebar 232 px på desktop, topbar på mobil. Tokens fra design/tokens.json v0.1 (Emballagemappen). */
+:root{
+  --font-head:'Newsreader',Georgia,'Times New Roman',serif;
+  --font-ui:'Source Sans 3','Helvetica Neue',Arial,sans-serif;
+  --font-mono:ui-monospace,Menlo,Consolas,monospace;
+  --bg:#F6F3EE; --surface:#FFFDFA; --surface2:#EFEBE3; --surface-hover:#FBFAF7; --surface-muted:#F3F0EA;
+  --line:#E6E1D8; --line-soft:#EDE9E2; --line-strong:#D5CFC5; --line-dashed:#C9C2B6;
+  --text:#2B2A27; --text2:#5F5B54; --text3:#6F6A61; --on-accent:#FFFDFA;
+  --accent:#1F4D3A; --accent-hover:#173D2E; --accent-tint:#E4EDE7;
+  --brass:#9C7A45; --brass-text:#6B5325; --brass-tint:#F3EBDD; --brass-line:#E0CFA7;
+  --ok:#2F5F44; --ok-tint:#E6F0EA; --ok-line:#CFE0D5;
+  --warn:#6F5618; --warn-tint:#F6EFDC; --warn-line:#E9DDBB;
+  --err:#8A3A32; --err-tint:#F5E6E3; --err-line:#EBD1CC;
+  --neutral:#5F5B54; --neutral-tint:#EFEBE4; --neutral-line:#DDD7CD;
+  --bar2:#A9A399; --control-border:#B8B2A8;
+  --shadow-card:0 1px 2px rgba(43,42,39,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1C1B19; --surface:#252422; --surface2:#2D2B28; --surface-hover:#2D2B28; --surface-muted:#33312D;
+    --line:#3A3833; --line-soft:#33312D; --line-strong:#4A4741; --line-dashed:#4A4741;
+    --text:#EDE9E2; --text2:#B8B2A8; --text3:#8F897F; --on-accent:#14301F;
+    --accent:#8CC2A6; --accent-hover:#9FD3B6; --accent-tint:#1F3A2C;
+    --brass:#D1B07C; --brass-text:#D1B07C; --brass-tint:#3A3222; --brass-line:#514620;
+    --ok:#9FD3B6; --ok-tint:#1F3A2C; --ok-line:#2C4F3C;
+    --warn:#E3C77A; --warn-tint:#3A3214; --warn-line:#514620;
+    --err:#E8A399; --err-tint:#3F2320; --err-line:#58302C;
+    --neutral:#B8B2A8; --neutral-tint:#2D2B28; --neutral-line:#3A3833;
+    --bar2:#6F6A61; --control-border:#5F5B54;
+    --shadow-card:0 1px 2px rgba(0,0,0,.3);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1C1B19; --surface:#252422; --surface2:#2D2B28; --surface-hover:#2D2B28; --surface-muted:#33312D;
+  --line:#3A3833; --line-soft:#33312D; --line-strong:#4A4741; --line-dashed:#4A4741;
+  --text:#EDE9E2; --text2:#B8B2A8; --text3:#8F897F; --on-accent:#14301F;
+  --accent:#8CC2A6; --accent-hover:#9FD3B6; --accent-tint:#1F3A2C;
+  --brass:#D1B07C; --brass-text:#D1B07C; --brass-tint:#3A3222; --brass-line:#514620;
+  --ok:#9FD3B6; --ok-tint:#1F3A2C; --ok-line:#2C4F3C;
+  --warn:#E3C77A; --warn-tint:#3A3214; --warn-line:#514620;
+  --err:#E8A399; --err-tint:#3F2320; --err-line:#58302C;
+  --neutral:#B8B2A8; --neutral-tint:#2D2B28; --neutral-line:#3A3833;
+  --bar2:#6F6A61; --control-border:#5F5B54;
+  --shadow-card:0 1px 2px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 14px/1.5 var(--font-ui)}
+a{color:var(--accent)}
+button,input,select,textarea{font-family:inherit}
+.app{display:flex;min-height:100%}
+.side{flex:0 0 232px;background:var(--surface2);border-right:1px solid var(--line);padding:28px 16px 20px;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;align-self:flex-start;overflow:auto}
+.mark{font:500 22px/1.1 var(--font-head);letter-spacing:-.01em;padding:0 12px}
+.sub{font-size:13px;color:var(--text2);padding:4px 12px 26px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.navbtn{display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;border-radius:6px;font-size:14px;color:var(--text);background:transparent;border:0;width:100%;text-align:left;cursor:pointer}
+.navbtn:hover{background:var(--surface-muted)}
+.navbtn.on{background:var(--surface);color:var(--accent);font-weight:600}
+.navbtn .dot{width:6px;height:6px;border-radius:50%;background:transparent;flex:none}
+.navbtn.on .dot{background:var(--accent)}
+.trust{margin-top:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px}
+.trust b{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;line-height:1.3}
+.lock{width:14px;height:16px;position:relative;flex:none}
+.lock::before{content:"";position:absolute;left:3px;top:0;width:8px;height:8px;border:1.5px solid var(--accent);border-bottom:none;border-radius:4px 4px 0 0}
+.lock::after{content:"";position:absolute;left:0;bottom:0;width:14px;height:10px;background:var(--accent);border-radius:2px}
+.trust p{margin:7px 0 0;font-size:12.5px;color:var(--text2);line-height:1.45}
+.meta{font-size:12px;color:var(--text3);padding:12px 4px 0;line-height:1.4}
+main{flex:1;min-width:0;padding-block:32px 48px;padding-inline:40px}
+.page{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;margin-bottom:24px}
+.crumb{font-size:12.5px;color:var(--text3);margin-bottom:6px}
+.crumb a{color:var(--text3)}
+h1{margin:0;font:400 32px/1.1 var(--font-head);letter-spacing:-.01em;text-wrap:balance}
+h2{margin:0;font:400 20px/1.2 var(--font-head)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{height:36px;padding:0 16px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface);color:var(--text);font:500 14px var(--font-ui);cursor:pointer;white-space:nowrap;transition:background-color 120ms ease}
+.btn:hover{background:var(--surface-muted)}
+.btn.pri{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn.pri:hover{background:var(--accent-hover)}
+.btn.sm{height:32px;padding:0 14px;font-size:13.5px}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--accent)}
+.btn.ghost:hover{background:var(--accent-tint)}
+.btn.danger{color:var(--err);border-color:var(--err-line)}
+.btn.danger:hover{background:var(--err-tint)}
+.btn[disabled]{background:var(--line);color:var(--text3);border-color:var(--line);cursor:not-allowed}
+.btn:focus-visible,.in:focus-visible,.ctl:focus-visible,.navbtn:focus-visible,tr.row:focus-visible,a:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+tr.row:focus-visible{outline-offset:-2px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow-card);min-width:0}
+.card.pad{padding:18px 22px}
+.card.tint-ok{background:var(--ok-tint);border-color:var(--ok-line)}
+.card.tint-warn{background:var(--warn-tint);border-color:var(--warn-line)}
+.chead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 22px 12px;border-bottom:1px solid var(--line-soft)}
+.chead p{margin:2px 0 0;font-size:13px;color:var(--text2)}
+.cfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 20px;font-size:13px;color:var(--text2);background:var(--surface-hover);border-radius:0 0 8px 8px}
+.ov{font:600 11.5px/1.2 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--text3)}
+.stat{display:flex;align-items:baseline;gap:6px;margin-top:10px;flex-wrap:wrap}
+.stat b{font:400 34px/1 var(--font-head);font-variant-numeric:tabular-nums}
+.stat span{font-size:15px;color:var(--text2)}
+.hint{font-size:13px;color:var(--text2);margin-top:8px;line-height:1.45}
+.chip{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:4px;font-size:12px;font-weight:500;border:1px solid;white-space:nowrap;vertical-align:middle}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.chip.ok{background:var(--ok-tint);color:var(--ok);border-color:var(--ok-line)}
+.chip.warn{background:var(--warn-tint);color:var(--warn);border-color:var(--warn-line)}
+.chip.err{background:var(--err-tint);color:var(--err);border-color:var(--err-line)}
+.chip.neu{background:var(--neutral-tint);color:var(--neutral);border-color:var(--neutral-line)}
+.badge{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:4px;font-size:11.5px;font-weight:600;letter-spacing:.02em;background:var(--brass-tint);color:var(--brass-text);border:1px solid var(--brass-line)}
+.drop{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding:12px 16px 12px 18px;border:1px dashed var(--line-dashed);border-radius:8px;background:var(--surface-hover);margin-bottom:16px}
+.drop.over{border-color:var(--accent);background:var(--accent-tint)}
+.drop>div:first-child{flex:1 1 320px}
+.drop .ico{width:40px;height:30px;border-radius:4px;border:1px solid var(--line);background:repeating-linear-gradient(135deg,var(--surface2) 0 5px,var(--surface) 5px 10px);display:flex;align-items:center;justify-content:center;font:10.5px var(--font-mono);color:var(--text3);flex:none}
+.drop b{font-size:14px;font-weight:500;display:block}
+.drop small{font-size:12.5px;color:var(--text3)}
+.tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.in,.ctl{height:36px;padding:0 12px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);color:var(--text);font:400 14px var(--font-ui);min-width:0}
+.in.search{width:min(320px,100%)}
+.in.sm{height:32px;font-size:13.5px;padding:0 10px}
+.in.num{text-align:right;font-variant-numeric:tabular-nums}
+.in.err-in{border-color:var(--err)}
+textarea.in{height:auto;min-height:72px;padding:8px 12px;line-height:1.45;resize:vertical;width:100%}
+label.tog{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer;margin-left:auto}
+.tablewrap{overflow-x:auto;border-radius:8px;position:relative;max-width:100%}
+table{width:100%;border-collapse:collapse}
+table.varer{min-width:860px}
+table.komp{min-width:980px}
+table.vana{min-width:520px}
+th{font:600 11.5px/1.2 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--text3);text-align:left;padding:11px 10px;background:var(--surface-hover);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:6px 10px;height:46px;border-bottom:1px solid var(--line-soft);font-size:13.5px;color:var(--text2);vertical-align:middle}
+td.name{font-size:14px;font-weight:500;color:var(--text)}
+td.name small{display:block;font-size:12.5px;font-weight:400;color:var(--text3)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.mono{font-family:var(--font-mono);font-size:12.5px}
+td.muted{color:var(--text3);font-style:italic}
+tr.row{cursor:pointer;transition:background-color 120ms ease}
+tr.row:hover{background:var(--surface-hover)}
+tr.total td{font-weight:600;color:var(--text);background:var(--surface-hover)}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+.grid2>*,.grid-eq>*,.stack{min-width:0}
+.grid-eq{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:16px}
+.metaline{display:flex;flex-wrap:wrap;align-items:center;gap:10px 28px;padding:14px 0 18px;border-bottom:1px solid var(--line);margin-bottom:24px;font-size:13.5px}
+.metaline span.k{color:var(--text3);margin-right:6px}
+.calc{display:grid;grid-template-columns:1fr auto;row-gap:8px;column-gap:12px;margin-top:14px;font-size:14px;align-items:baseline}
+.calc .k{color:var(--text2)}
+.calc .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.bigkg{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.bigkg b{font:400 30px/1 var(--font-head);font-variant-numeric:tabular-nums}
+.bigkg b small{font:400 14px var(--font-ui);color:var(--text2)}
+.radios{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.radios label{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer}
+.radios input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.bars .r{display:grid;grid-template-columns:150px minmax(0,1fr) 84px 84px;gap:14px;align-items:center;padding:12px 22px;border-bottom:1px solid var(--line-soft)}
+.bars .r .n{font-size:14px;font-weight:500}
+.bars .r .nn{font-size:12px;color:var(--text3)}
+.bars .track{display:flex;flex-direction:column;gap:4px}
+.bar{height:8px;border-radius:2px;background:var(--accent)}
+.bar.b2{background:var(--bar2)}
+.bars .v{text-align:right;font-size:13.5px;font-variant-numeric:tabular-nums}
+.bars .v2{color:var(--text2)}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--text2);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:2px;background:var(--accent);display:inline-block}
+.legend i.b2{background:var(--bar2)}
+.ordn{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.ordn label{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface);font-size:14px;cursor:pointer}
+.ordn label.on{border:1.5px solid var(--accent);background:var(--accent-tint);font-weight:500}
+.ordn input{accent-color:var(--accent);margin:0}
+pre.csv{margin:12px 0 0;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface-hover);font:12.5px/1.5 var(--font-mono);color:var(--text);overflow-x:auto;max-height:260px}
+.foot{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12.5px;color:var(--text3)}
+.foot .lock::before{border-color:var(--text3)} .foot .lock::after{background:var(--text3)}
+.empty{padding:48px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.empty .ico{width:72px;height:56px;border:1px dashed var(--line-dashed);border-radius:8px;background:repeating-linear-gradient(135deg,var(--bg) 0 6px,var(--surface) 6px 12px);display:flex;align-items:center;justify-content:center;font:12px var(--font-mono);color:var(--text3)}
+.empty h2{font-size:26px;line-height:1.15;margin-top:8px}
+.empty p{margin:0;max-width:520px;font-size:15px;color:var(--text2)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+.steps .s{border:1px solid var(--line);border-radius:8px;padding:18px 20px;background:var(--surface-hover)}
+.steps .s b{display:block;font:400 22px/1 var(--font-head);color:var(--brass)}
+.steps .s strong{display:block;font-size:15px;margin-top:6px}
+.steps .s p{margin:4px 0 0;font-size:13.5px;color:var(--text2);line-height:1.45}
+.note{border:1px solid var(--warn-line);background:var(--warn-tint);color:var(--warn);border-radius:8px;padding:14px 18px;font-size:13.5px;line-height:1.45}
+.note b{font-weight:600}
+.log{list-style:none;margin:0;padding:0}
+.log li{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:10px 22px;border-bottom:1px solid var(--line-soft);font-size:13.5px}
+.log li time{color:var(--text3);font-variant-numeric:tabular-nums}
+.test ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:12px;font-size:14.5px;line-height:1.5}
+.test li b{font-weight:600}
+.test li small{display:block;color:var(--text2);font-size:13.5px}
+.x{width:28px;height:28px;border-radius:6px;border:0;background:transparent;color:var(--text3);font-size:18px;line-height:1;cursor:pointer}
+.x:hover{background:var(--err-tint);color:var(--err)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 14px;border-radius:6px;font-size:13.5px;box-shadow:0 6px 20px rgba(43,42,39,.18);max-width:calc(100vw - 32px);z-index:5}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:899px){
+  .app{flex-direction:column}
+  .side{flex:none;position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:14px 16px;flex-direction:row;align-items:center;flex-wrap:wrap;gap:8px 14px}
+  .mark{padding:0;font-size:20px} .sub{padding:0;flex:1 1 100%;order:3;display:none}
+  .nav{flex-direction:row;flex-wrap:wrap;gap:4px;margin-left:auto}
+  .navbtn{height:32px;width:auto;font-size:13.5px;padding:0 10px}
+  .trust,.meta{display:none}
+  main{padding-block:20px 40px;padding-inline:16px}
+  .grid2{grid-template-columns:1fr}
+  .bars .r{grid-template-columns:110px minmax(0,1fr) 64px 64px;gap:8px;padding:10px 14px}
+  .log li{grid-template-columns:1fr}
+}
+@media (max-width:1100px) and (min-width:900px){.grid2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+<div class="app" id="app" aria-live="polite"></div>
+<input type="file" id="file-csv" accept=".csv,.txt,text/csv,text/plain" class="sr" aria-label="Vælg CSV-fil">
+<input type="file" id="file-json" accept=".json,application/json" class="sr" aria-label="Vælg sikkerhedskopi (JSON)">
+<script type="text/plain" id="testdata-csv">varenummer;varenavn;varekategori;leverandoer;leverandoer_land;private_label;hotel_er_producent;komponent;emballagetype;materiale;materiale_detalje;vaegt_g_pr_stk;antal_pr_salgsenhed;solgt_Q1;solgt_Q2;solgt_Q3;solgt_Q4;husholdning_erhverv;klassificering_note
+HT-SPA-001;Bodylotion Havtorn 200 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Flaske;Primær;Plast;PET;21;1;140;165;210;260;Husholdning;Eget mærke fyldt af dansk kontraktproducent. Hotellet afgiver ordren og bestemmer designet, så hotellet er producent (F-2). Sælges i spabutikken og tages med hjem.
+HT-SPA-001;Bodylotion Havtorn 200 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Pumpe;Primær;Plast;PP;6;1;140;165;210;260;Husholdning;Eget mærke fyldt af dansk kontraktproducent. Hotellet afgiver ordren og bestemmer designet, så hotellet er producent (F-2). Sælges i spabutikken og tages med hjem.
+HT-SPA-001;Bodylotion Havtorn 200 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Etiket;Primær;Papir;Selvklæbende papiretiket;1;1;140;165;210;260;Husholdning;Eget mærke fyldt af dansk kontraktproducent. Hotellet afgiver ordren og bestemmer designet, så hotellet er producent (F-2). Sælges i spabutikken og tages med hjem.
+HT-SPA-002;Shampoo Birk 250 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Flaske;Primær;Plast;HDPE;26;1;120;130;180;200;Husholdning;Eget mærke, dansk kontraktproducent. Hotellet er producent. Sælges i spabutikken.
+HT-SPA-002;Shampoo Birk 250 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Fliplåg;Primær;Plast;PP;4;1;120;130;180;200;Husholdning;Eget mærke, dansk kontraktproducent. Hotellet er producent. Sælges i spabutikken.
+HT-SPA-002;Shampoo Birk 250 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Etiket;Primær;Papir;Selvklæbende papiretiket;1;1;120;130;180;200;Husholdning;Eget mærke, dansk kontraktproducent. Hotellet er producent. Sælges i spabutikken.
+HT-SPA-003;Bodyscrub Salt & Fyr 300 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Krukke;Primær;Glas;Klart glas;215;1;80;95;110;190;Husholdning;Eget mærke. Fire komponenter inkl. foldeæske (sekundær emballage omkring én salgsenhed tæller som primær salgsemballage).
+HT-SPA-003;Bodyscrub Salt & Fyr 300 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Låg;Primær;Metal – aluminium;Aluminium;9;1;80;95;110;190;Husholdning;Eget mærke. Fire komponenter inkl. foldeæske (sekundær emballage omkring én salgsenhed tæller som primær salgsemballage).
+HT-SPA-003;Bodyscrub Salt & Fyr 300 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Etiket;Primær;Papir;Selvklæbende papiretiket;1;1;80;95;110;190;Husholdning;Eget mærke. Fire komponenter inkl. foldeæske (sekundær emballage omkring én salgsenhed tæller som primær salgsemballage).
+HT-SPA-003;Bodyscrub Salt & Fyr 300 ml;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Foldeæske;Primær;Pap;Karton (foldeæske);24;1;80;95;110;190;Husholdning;Eget mærke. Fire komponenter inkl. foldeæske (sekundær emballage omkring én salgsenhed tæller som primær salgsemballage).
+HT-SPA-004;Ansigtscreme Lyng 50 ml;Spa – eget mærke, direkte import;Baltic Cosmetics OÜ;Estland;Ja;Ja;Krukke;Primær;Glas;Klart glas;118;1;60;70;85;150;Husholdning;Eget mærke importeret direkte fra Estland. Hotellet er både importør og mærkeejer og dermed producent for AL emballage, også transportkassen (F-2). Transportkasse: 1 pr. 24 stk., derfor antal_pr_salgsenhed 0,0417.
+HT-SPA-004;Ansigtscreme Lyng 50 ml;Spa – eget mærke, direkte import;Baltic Cosmetics OÜ;Estland;Ja;Ja;Låg;Primær;Plast;PP;12;1;60;70;85;150;Husholdning;Eget mærke importeret direkte fra Estland. Hotellet er både importør og mærkeejer og dermed producent for AL emballage, også transportkassen (F-2). Transportkasse: 1 pr. 24 stk., derfor antal_pr_salgsenhed 0,0417.
+HT-SPA-004;Ansigtscreme Lyng 50 ml;Spa – eget mærke, direkte import;Baltic Cosmetics OÜ;Estland;Ja;Ja;Foldeæske;Primær;Pap;Karton (foldeæske);22;1;60;70;85;150;Husholdning;Eget mærke importeret direkte fra Estland. Hotellet er både importør og mærkeejer og dermed producent for AL emballage, også transportkassen (F-2). Transportkasse: 1 pr. 24 stk., derfor antal_pr_salgsenhed 0,0417.
+HT-SPA-004;Ansigtscreme Lyng 50 ml;Spa – eget mærke, direkte import;Baltic Cosmetics OÜ;Estland;Ja;Ja;Indlægsseddel;Primær;Papir;Papir;2;1;60;70;85;150;Husholdning;Eget mærke importeret direkte fra Estland. Hotellet er både importør og mærkeejer og dermed producent for AL emballage, også transportkassen (F-2). Transportkasse: 1 pr. 24 stk., derfor antal_pr_salgsenhed 0,0417.
+HT-SPA-004;Ansigtscreme Lyng 50 ml;Spa – eget mærke, direkte import;Baltic Cosmetics OÜ;Estland;Ja;Ja;Transportkasse (1 pr. 24 stk.);Transport;Pap;Bølgepap;380;0,0417;60;70;85;150;Erhverv;Eget mærke importeret direkte fra Estland. Hotellet er både importør og mærkeejer og dermed producent for AL emballage, også transportkassen (F-2). Transportkasse: 1 pr. 24 stk., derfor antal_pr_salgsenhed 0,0417.
+HT-SPA-005;Badesalt Havbris 400 g;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Pose;Primær;Komposit;Kraftpapir/PE-laminat (ca. 82/18);22;1;90;70;60;210;Husholdning;Komposit: kraftpapirpose med PE-inderlag (ca. 18 % plast), kan ikke skilles ad. Afklar med ordningen om det indberettes som komposit eller som papir med plastbelægning (H-5).
+HT-SPA-005;Badesalt Havbris 400 g;Spa – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Etiket;Primær;Papir;Selvklæbende papiretiket;1;1;90;70;60;210;Husholdning;Komposit: kraftpapirpose med PE-inderlag (ca. 18 % plast), kan ikke skilles ad. Afklar med ordningen om det indberettes som komposit eller som papir med plastbelægning (H-5).
+HT-SPA-006;Massageolie Neutral 5 L (til behandlinger);Spa – forbrug i behandling;Nordic Skincare Lab ApS;Danmark;Nej;Nej (leverandør);Dunk;Primær;Plast;HDPE;185;1;12;12;14;14;Erhverv;Leverandørens eget mærke (NSL Professional), bruges i behandlinger og sælges ikke videre. Dansk leverandør er producent. Affaldet opstår på hotellet, så erhvervsemballage. Indgår ikke i hotellets indberetning, men dokumentér hvorfor.
+HT-SPA-006;Massageolie Neutral 5 L (til behandlinger);Spa – forbrug i behandling;Nordic Skincare Lab ApS;Danmark;Nej;Nej (leverandør);Skruelåg;Primær;Plast;PP;11;1;12;12;14;14;Erhverv;Leverandørens eget mærke (NSL Professional), bruges i behandlinger og sælges ikke videre. Dansk leverandør er producent. Affaldet opstår på hotellet, så erhvervsemballage. Indgår ikke i hotellets indberetning, men dokumentér hvorfor.
+HT-SPA-006;Massageolie Neutral 5 L (til behandlinger);Spa – forbrug i behandling;Nordic Skincare Lab ApS;Danmark;Nej;Nej (leverandør);Etiket;Primær;Papir;Selvklæbende papiretiket;3;1;12;12;14;14;Erhverv;Leverandørens eget mærke (NSL Professional), bruges i behandlinger og sælges ikke videre. Dansk leverandør er producent. Affaldet opstår på hotellet, så erhvervsemballage. Indgår ikke i hotellets indberetning, men dokumentér hvorfor.
+HT-SPA-007;Duftlys Skovbund 220 g;Spa – eget mærke;Lys & Væge ApS;Danmark;Ja;Ja;Glas;Primær;Glas;Klart glas (lyseglas);165;1;70;50;60;240;Husholdning;Eget mærke fra dansk lysestøber, hotellet er producent. Tvivl: er lysets glas emballage eller en del af varen? Praksis varierer mellem ordninger og lande. Afklar og dokumentér valget.
+HT-SPA-007;Duftlys Skovbund 220 g;Spa – eget mærke;Lys & Væge ApS;Danmark;Ja;Ja;Låg;Primær;Metal – jern/stål;Fortinnet stål;16;1;70;50;60;240;Husholdning;Eget mærke fra dansk lysestøber, hotellet er producent. Tvivl: er lysets glas emballage eller en del af varen? Praksis varierer mellem ordninger og lande. Afklar og dokumentér valget.
+HT-SPA-007;Duftlys Skovbund 220 g;Spa – eget mærke;Lys & Væge ApS;Danmark;Ja;Ja;Æske;Primær;Pap;Karton (foldeæske);32;1;70;50;60;240;Husholdning;Eget mærke fra dansk lysestøber, hotellet er producent. Tvivl: er lysets glas emballage eller en del af varen? Praksis varierer mellem ordninger og lande. Afklar og dokumentér valget.
+HT-VAND-001;Kildevand still 0,5 L PET (eget mærke, pant A);Drikkevarer – eget mærke;Kildevand Nord A/S;Danmark;Ja;Nej (pant);Flaske;Primær;Plast;PET;14;1;8500;9800;12500;9200;Undtaget (pant);Pantbelagt drikkevareemballage er undtaget fra producentansvarsreglerne og hører under Dansk Retursystem (F-5). Afklar hvem der er tilmeldt Dansk Retursystem for eget mærke, tapperiet eller hotellet. Står på værelser og sælges i spa.
+HT-VAND-001;Kildevand still 0,5 L PET (eget mærke, pant A);Drikkevarer – eget mærke;Kildevand Nord A/S;Danmark;Ja;Nej (pant);Kapsel;Primær;Plast;HDPE;2;1;8500;9800;12500;9200;Undtaget (pant);Pantbelagt drikkevareemballage er undtaget fra producentansvarsreglerne og hører under Dansk Retursystem (F-5). Afklar hvem der er tilmeldt Dansk Retursystem for eget mærke, tapperiet eller hotellet. Står på værelser og sælges i spa.
+HT-VAND-001;Kildevand still 0,5 L PET (eget mærke, pant A);Drikkevarer – eget mærke;Kildevand Nord A/S;Danmark;Ja;Nej (pant);Etiket;Primær;Plast;PP-folie;0,5;1;8500;9800;12500;9200;Undtaget (pant);Pantbelagt drikkevareemballage er undtaget fra producentansvarsreglerne og hører under Dansk Retursystem (F-5). Afklar hvem der er tilmeldt Dansk Retursystem for eget mærke, tapperiet eller hotellet. Står på værelser og sælges i spa.
+HT-VAND-002;Vand med brus 0,75 L glas (Aqua Monti, til restaurant);Drikkevarer – eksternt brand;Vinimport Jylland ApS;Danmark;Nej;Nej (leverandør);Flaske;Primær;Glas;Grønt glas;480;1;2600;3100;3800;3000;Erhverv;Eksternt brand købt via dansk importør, importøren er producent. Hvis flasken er pantbelagt hører den desuden under Dansk Retursystem. Drikkes i restauranten, affaldet opstår på hotellet. Ingen indberetning for hotellet, kun dokumentation.
+HT-VAND-002;Vand med brus 0,75 L glas (Aqua Monti, til restaurant);Drikkevarer – eksternt brand;Vinimport Jylland ApS;Danmark;Nej;Nej (leverandør);Kapsel;Primær;Metal – aluminium;Aluminium skruekapsel;3;1;2600;3100;3800;3000;Erhverv;Eksternt brand købt via dansk importør, importøren er producent. Hvis flasken er pantbelagt hører den desuden under Dansk Retursystem. Drikkes i restauranten, affaldet opstår på hotellet. Ingen indberetning for hotellet, kun dokumentation.
+HT-VAND-002;Vand med brus 0,75 L glas (Aqua Monti, til restaurant);Drikkevarer – eksternt brand;Vinimport Jylland ApS;Danmark;Nej;Nej (leverandør);Etiket;Primær;Papir;Papiretiket;2;1;2600;3100;3800;3000;Erhverv;Eksternt brand købt via dansk importør, importøren er producent. Hvis flasken er pantbelagt hører den desuden under Dansk Retursystem. Drikkes i restauranten, affaldet opstår på hotellet. Ingen indberetning for hotellet, kun dokumentation.
+HT-AMEN-001;Shampoo gæsteflaske 30 ml (eget mærke);Værelsesamenities – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Flaske;Primær;Plast;HDPE;7;1;14000;15500;19000;15000;Erhverv;ANTAGELSE: forbruges på værelset og affaldet opstår på hotellet, så vi klassificerer som erhvervsemballage (en husholdning er ikke sandsynlig slutbruger, F-4). Skal bekræftes hos ordningen/DPA. OBS: PPWR forbyder fra 2030 miniature-engangsemballage til kosmetik på hoteller (bilag V), verificér.
+HT-AMEN-001;Shampoo gæsteflaske 30 ml (eget mærke);Værelsesamenities – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Låg;Primær;Plast;PP;1,5;1;14000;15500;19000;15000;Erhverv;ANTAGELSE: forbruges på værelset og affaldet opstår på hotellet, så vi klassificerer som erhvervsemballage (en husholdning er ikke sandsynlig slutbruger, F-4). Skal bekræftes hos ordningen/DPA. OBS: PPWR forbyder fra 2030 miniature-engangsemballage til kosmetik på hoteller (bilag V), verificér.
+HT-AMEN-001;Shampoo gæsteflaske 30 ml (eget mærke);Værelsesamenities – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Etiket;Primær;Papir;Selvklæbende papiretiket;0,3;1;14000;15500;19000;15000;Erhverv;ANTAGELSE: forbruges på værelset og affaldet opstår på hotellet, så vi klassificerer som erhvervsemballage (en husholdning er ikke sandsynlig slutbruger, F-4). Skal bekræftes hos ordningen/DPA. OBS: PPWR forbyder fra 2030 miniature-engangsemballage til kosmetik på hoteller (bilag V), verificér.
+HT-AMEN-002;Gæstesæbe 20 g i papirsvøb (eget mærke);Værelsesamenities – eget mærke;Nordic Skincare Lab ApS;Danmark;Ja;Ja;Svøb;Primær;Papir;Papir;1,2;1;9000;9500;12000;9800;Erhverv;Samme antagelse som HT-AMEN-001: forbruges på værelset, erhvervsemballage.
+HT-AMEN-003;Hotelslippers engangs (par) i pose;Værelsesamenities – direkte import;Guangzhou Hotel Supplies Co.;Kina;Nej;Ja (importør);Pose;Primær;Plast;LDPE;3;1;4200;4600;6100;4400;Erhverv;Umærket vare importeret direkte fra tredjeland. Hotellet er importør og dermed producent for al emballagen, både pose og transportkasse (F-2). Transportkasse: 1 pr. 200 par, antal_pr_salgsenhed 0,005.
+HT-AMEN-003;Hotelslippers engangs (par) i pose;Værelsesamenities – direkte import;Guangzhou Hotel Supplies Co.;Kina;Nej;Ja (importør);Transportkasse (1 pr. 200 par);Transport;Pap;Bølgepap;650;0,005;4200;4600;6100;4400;Erhverv;Umærket vare importeret direkte fra tredjeland. Hotellet er importør og dermed producent for al emballagen, både pose og transportkasse (F-2). Transportkasse: 1 pr. 200 par, antal_pr_salgsenhed 0,005.
+HT-AMEN-004;Godnat-chokolade 10 g (eksternt brand);F&B – eksternt brand;Chokoladehuset ApS;Danmark;Nej;Nej (leverandør);Svøb;Primær;Papir;Papir;0,8;1;16000;17000;21000;17500;Erhverv;Dansk producent med eget mærke er producent. Spises på værelset, erhvervsemballage. Hotellet dokumenterer kun. Transportkasse: 1 pr. 500 stk., antal_pr_salgsenhed 0,002.
+HT-AMEN-004;Godnat-chokolade 10 g (eksternt brand);F&B – eksternt brand;Chokoladehuset ApS;Danmark;Nej;Nej (leverandør);Folie;Primær;Metal – aluminium;Aluminiumsfolie;0,4;1;16000;17000;21000;17500;Erhverv;Dansk producent med eget mærke er producent. Spises på værelset, erhvervsemballage. Hotellet dokumenterer kun. Transportkasse: 1 pr. 500 stk., antal_pr_salgsenhed 0,002.
+HT-AMEN-004;Godnat-chokolade 10 g (eksternt brand);F&B – eksternt brand;Chokoladehuset ApS;Danmark;Nej;Nej (leverandør);Transportkasse (1 pr. 500 stk.);Transport;Pap;Bølgepap;300;0,002;16000;17000;21000;17500;Erhverv;Dansk producent med eget mærke er producent. Spises på værelset, erhvervsemballage. Hotellet dokumenterer kun. Transportkasse: 1 pr. 500 stk., antal_pr_salgsenhed 0,002.
+HT-FB-001;Kaffekapsler æske á 10 stk. (eksternt brand);F&B – eksternt brand;Kaffekompagniet A/S;Danmark;Nej;Nej (leverandør);Kapsel;Primær;Metal – aluminium;Aluminiumskapsel;1,2;10;1800;1900;2300;2000;Erhverv;Salgsenhed er en æske med 10 kapsler, derfor antal_pr_salgsenhed 10 for kapslen. Kapsler regnes som emballage efter PPWR. Dansk leverandør er producent. Bruges på værelser og i lobby, erhvervsemballage.
+HT-FB-001;Kaffekapsler æske á 10 stk. (eksternt brand);F&B – eksternt brand;Kaffekompagniet A/S;Danmark;Nej;Nej (leverandør);Æske;Primær;Pap;Karton (foldeæske);15;1;1800;1900;2300;2000;Erhverv;Salgsenhed er en æske med 10 kapsler, derfor antal_pr_salgsenhed 10 for kapslen. Kapsler regnes som emballage efter PPWR. Dansk leverandør er producent. Bruges på værelser og i lobby, erhvervsemballage.
+HT-FB-002;Take-away kaffekop 300 ml med låg (umærket);Serviceemballage;PackPartner Danmark ApS;Danmark;Nej;Nej (serviceemballage);Kop;Service;Komposit;Pap med PE-belægning (ca. 5-8 % plast);11;1;5200;6000;8800;5600;Husholdning;Serviceemballage købt umærket fra dansk leverandør: producenten er den, der fremstiller eller får fremstillet den tomme emballage (F-3), altså leverandøren. Trykkes koppen med hotellets logo, kan ansvaret flytte til hotellet. Tages med af gæsten, husholdningsemballage. Koppen er PE-belagt pap, afklar om den indberettes som pap eller komposit.
+HT-FB-002;Take-away kaffekop 300 ml med låg (umærket);Serviceemballage;PackPartner Danmark ApS;Danmark;Nej;Nej (serviceemballage);Låg;Service;Plast;PP;3;1;5200;6000;8800;5600;Husholdning;Serviceemballage købt umærket fra dansk leverandør: producenten er den, der fremstiller eller får fremstillet den tomme emballage (F-3), altså leverandøren. Trykkes koppen med hotellets logo, kan ansvaret flytte til hotellet. Tages med af gæsten, husholdningsemballage. Koppen er PE-belagt pap, afklar om den indberettes som pap eller komposit.
+HT-BUTIK-001;Mulepose økologisk bomuld med logo (merchandise);Butik – eget mærke;Textil & Tryk ApS;Danmark;Ja;Ja;Polypose fra leverandør;Primær;Plast;LDPE;5;1;300;350;520;600;Erhverv;Muleposen er en VARE (sælges), ikke emballage. Kun hangtag og leverandørens polypose er emballage. Polyposen fjernes i butikken, så affaldet opstår på hotellet (erhverv), mens hangtag følger kunden hjem (husholdning). Samme vare, to klassificeringer.
+HT-BUTIK-001;Mulepose økologisk bomuld med logo (merchandise);Butik – eget mærke;Textil & Tryk ApS;Danmark;Ja;Ja;Hangtag;Primær;Papir;Karton-hangtag med bomuldssnor;2;1;300;350;520;600;Husholdning;Muleposen er en VARE (sælges), ikke emballage. Kun hangtag og leverandørens polypose er emballage. Polyposen fjernes i butikken, så affaldet opstår på hotellet (erhverv), mens hangtag følger kunden hjem (husholdning). Samme vare, to klassificeringer.
+HT-BUTIK-002;Papirbærepose med hotellets logo (udleveres i spabutik);Serviceemballage – eget logo;PackPartner Danmark ApS;Danmark;Ja;Ja;Pose;Service;Papir;Kraftpapir;48;1;900;1000;1400;1600;Husholdning;Serviceemballage fremstillet med hotellets logo: ansvaret ligger hos hotellet, ikke leverandøren (F-3, Grakom nævner undtagelse for mikrovirksomheder, hotellet er ikke mikro). Tal er UDLEVEREDE antal, ikke solgte. Følger kunden hjem, husholdningsemballage.
+HT-BUTIK-002;Papirbærepose med hotellets logo (udleveres i spabutik);Serviceemballage – eget logo;PackPartner Danmark ApS;Danmark;Ja;Ja;Håndtag;Service;Papir;Snoet papirsnor;4;1;900;1000;1400;1600;Husholdning;Serviceemballage fremstillet med hotellets logo: ansvaret ligger hos hotellet, ikke leverandøren (F-3, Grakom nævner undtagelse for mikrovirksomheder, hotellet er ikke mikro). Tal er UDLEVEREDE antal, ikke solgte. Følger kunden hjem, husholdningsemballage.
+HT-GAVE-001;Gaveæske Spa Deluxe (indeholder HT-SPA-001, -003, -007);Gaveæsker – eget mærke;Æskefabrikken ApS;Danmark;Ja;Ja;Æske med låg;Primær;Pap;Massivpap (stiv æske);230;1;45;30;40;310;Husholdning;Sammensat vare. Tæl kun æskens egen emballage her. FÆLDE: sælges gaveæsken som ét varenummer, optræder indholdet (HT-SPA-001, -003, -007) ikke i salgseksporten, og indholdets emballage mangler. Brug en stykliste til at lægge indholdets emballage til. Omvendt må indholdet ikke tælles dobbelt, hvis det også sælges løst.
+HT-GAVE-001;Gaveæske Spa Deluxe (indeholder HT-SPA-001, -003, -007);Gaveæsker – eget mærke;Æskefabrikken ApS;Danmark;Ja;Ja;Silkepapir;Primær;Papir;Silkepapir;10;1;45;30;40;310;Husholdning;Sammensat vare. Tæl kun æskens egen emballage her. FÆLDE: sælges gaveæsken som ét varenummer, optræder indholdet (HT-SPA-001, -003, -007) ikke i salgseksporten, og indholdets emballage mangler. Brug en stykliste til at lægge indholdets emballage til. Omvendt må indholdet ikke tælles dobbelt, hvis det også sælges løst.
+HT-GAVE-001;Gaveæske Spa Deluxe (indeholder HT-SPA-001, -003, -007);Gaveæsker – eget mærke;Æskefabrikken ApS;Danmark;Ja;Ja;Bånd;Primær;Tekstil;Polyesterbånd;4;1;45;30;40;310;Husholdning;Sammensat vare. Tæl kun æskens egen emballage her. FÆLDE: sælges gaveæsken som ét varenummer, optræder indholdet (HT-SPA-001, -003, -007) ikke i salgseksporten, og indholdets emballage mangler. Brug en stykliste til at lægge indholdets emballage til. Omvendt må indholdet ikke tælles dobbelt, hvis det også sælges løst.
+HT-GAVE-002;Gavekort i papæske;Gavekort – eget mærke;PackPartner Danmark ApS;Danmark;Ja;Ja;Æske;Primær;Pap;Karton (foldeæske);20;1;120;90;110;480;Husholdning;Kortet (PVC, 5 g) er varen og ikke emballage. Kun æsken er emballage. Hotellet får æsken fremstillet med eget logo, hotellet er producent.
+HT-EXT-001;Ansigtsserum 30 ml (Lumi Nordic, eksternt brand);Butik – eksternt brand via dansk distributør;Nordic Beauty Distribution A/S;Danmark;Nej;Nej (leverandør);Flaske;Primær;Glas;Klart glas;62;1;40;45;55;90;Husholdning;Eksternt brand købt via dansk importør/distributør, som er producent. Hotellet indberetter ikke, men gemmer leverandørerklæring (CVR + bekræftelse af registrering hos DPA) som dokumentation.
+HT-EXT-001;Ansigtsserum 30 ml (Lumi Nordic, eksternt brand);Butik – eksternt brand via dansk distributør;Nordic Beauty Distribution A/S;Danmark;Nej;Nej (leverandør);Pipette;Primær;Plast;PP med gummiblære;6;1;40;45;55;90;Husholdning;Eksternt brand købt via dansk importør/distributør, som er producent. Hotellet indberetter ikke, men gemmer leverandørerklæring (CVR + bekræftelse af registrering hos DPA) som dokumentation.
+HT-EXT-001;Ansigtsserum 30 ml (Lumi Nordic, eksternt brand);Butik – eksternt brand via dansk distributør;Nordic Beauty Distribution A/S;Danmark;Nej;Nej (leverandør);Æske;Primær;Pap;Karton (foldeæske);18;1;40;45;55;90;Husholdning;Eksternt brand købt via dansk importør/distributør, som er producent. Hotellet indberetter ikke, men gemmer leverandørerklæring (CVR + bekræftelse af registrering hos DPA) som dokumentation.
+HT-EXT-002;Badeolie 100 ml (Svea Badolja, svensk brand købt direkte);Butik – eksternt brand, direkte import;Svea Badolja AB;Sverige;Nej;Ja (importør);Flaske;Primær;Glas;Brunt glas;96;1;35;40;50;80;Husholdning;Eksternt brand købt direkte fra Sverige uden dansk mellemled. Hotellet tilgængeliggør første gang i Danmark og er dermed producent, også for transportemballagen (F-2). Tjek om leverandøren har en bemyndiget repræsentant i Danmark, så flytter ansvaret. Transportkasse: 1 pr. 12 stk., antal_pr_salgsenhed 0,0833.
+HT-EXT-002;Badeolie 100 ml (Svea Badolja, svensk brand købt direkte);Butik – eksternt brand, direkte import;Svea Badolja AB;Sverige;Nej;Ja (importør);Låg;Primær;Metal – aluminium;Aluminium;5;1;35;40;50;80;Husholdning;Eksternt brand købt direkte fra Sverige uden dansk mellemled. Hotellet tilgængeliggør første gang i Danmark og er dermed producent, også for transportemballagen (F-2). Tjek om leverandøren har en bemyndiget repræsentant i Danmark, så flytter ansvaret. Transportkasse: 1 pr. 12 stk., antal_pr_salgsenhed 0,0833.
+HT-EXT-002;Badeolie 100 ml (Svea Badolja, svensk brand købt direkte);Butik – eksternt brand, direkte import;Svea Badolja AB;Sverige;Nej;Ja (importør);Etiket;Primær;Papir;Papiretiket;1;1;35;40;50;80;Husholdning;Eksternt brand købt direkte fra Sverige uden dansk mellemled. Hotellet tilgængeliggør første gang i Danmark og er dermed producent, også for transportemballagen (F-2). Tjek om leverandøren har en bemyndiget repræsentant i Danmark, så flytter ansvaret. Transportkasse: 1 pr. 12 stk., antal_pr_salgsenhed 0,0833.
+HT-EXT-002;Badeolie 100 ml (Svea Badolja, svensk brand købt direkte);Butik – eksternt brand, direkte import;Svea Badolja AB;Sverige;Nej;Ja (importør);Transportkasse (1 pr. 12 stk.);Transport;Pap;Bølgepap;350;0,0833;35;40;50;80;Erhverv;Eksternt brand købt direkte fra Sverige uden dansk mellemled. Hotellet tilgængeliggør første gang i Danmark og er dermed producent, også for transportemballagen (F-2). Tjek om leverandøren har en bemyndiget repræsentant i Danmark, så flytter ansvaret. Transportkasse: 1 pr. 12 stk., antal_pr_salgsenhed 0,0833.
+HT-TEX-001;Badekåbe frotté med logo (sælges i butik);Butik – eget mærke, direkte import;Têxteis do Minho Lda;Portugal;Ja;Ja;Pose;Primær;Plast;LDPE;9;1;25;20;30;70;Husholdning;Eget mærke importeret direkte fra Portugal. Hotellet er importør og mærkeejer, altså producent for al emballage. Kåben sælges i sin pose, så posen følger kunden hjem (husholdning), transportkassen bliver på hotellet (erhverv). Transportkasse: 1 pr. 20 stk., antal_pr_salgsenhed 0,05.
+HT-TEX-001;Badekåbe frotté med logo (sælges i butik);Butik – eget mærke, direkte import;Têxteis do Minho Lda;Portugal;Ja;Ja;Banderole;Primær;Papir;Karton-banderole;3;1;25;20;30;70;Husholdning;Eget mærke importeret direkte fra Portugal. Hotellet er importør og mærkeejer, altså producent for al emballage. Kåben sælges i sin pose, så posen følger kunden hjem (husholdning), transportkassen bliver på hotellet (erhverv). Transportkasse: 1 pr. 20 stk., antal_pr_salgsenhed 0,05.
+HT-TEX-001;Badekåbe frotté med logo (sælges i butik);Butik – eget mærke, direkte import;Têxteis do Minho Lda;Portugal;Ja;Ja;Transportkasse (1 pr. 20 stk.);Transport;Pap;Bølgepap;800;0,05;25;20;30;70;Erhverv;Eget mærke importeret direkte fra Portugal. Hotellet er importør og mærkeejer, altså producent for al emballage. Kåben sælges i sin pose, så posen følger kunden hjem (husholdning), transportkassen bliver på hotellet (erhverv). Transportkasse: 1 pr. 20 stk., antal_pr_salgsenhed 0,05.</script>
+<script type="text/plain" id="eksempel-salg-1">Item_No;Description;Qty;Dept_Code;Unit_Price;Sale_Date
+HT-SPA-001;Bodylotion Havtorn 200 ml;60;SPA;189,00;2026-07-05
+HT-SPA-002;Shampoo Birk 250 ml;45;SPA;159,00;2026-07-12
+HT-SPA-003;Bodyscrub Salt & Fyr 300 ml;40;SPA;229,00;2026-07-19
+HT-SPA-001;Bodylotion Havtorn 200 ml;55;SPA;189,00;2026-07-26
+HT-SPA-008;Håndcreme Tang 75 ml;25;SPA;99,00;2026-07-26
+HT-EXT-001;Ansigtsserum 30 ml (Lumi Nordic);20;SPA;349,00;2026-07-31
+HT-GAVE-001;Gaveæske Spa Deluxe;10;RECEP;695,00;2026-07-31
+HT-SPA-002;Shampoo Birk 250 ml;70;SPA;159,00;2026-08-09
+HT-SPA-001;Bodylotion Havtorn 200 ml;70;SPA;189,00;2026-08-16
+HT-SPA-003;Bodyscrub Salt & Fyr 300 ml;35;SPA;229,00;2026-08-23
+HT-SPA-008;Håndcreme Tang 75 ml;30;SPA;99,00;2026-08-23
+HT-EXT-001;Ansigtsserum 30 ml (Lumi Nordic);15;SPA;349,00;2026-08-30
+HT-GAVE-001;Gaveæske Spa Deluxe;15;RECEP;695,00;2026-08-30
+HT-SPA-001;Bodylotion Havtorn 200 ml;55;SPA;189,00;2026-09-13
+HT-SPA-002;Shampoo Birk 250 ml;60;SPA;159,00;2026-09-20
+HT-SPA-008;Håndcreme Tang 75 ml;35;SPA;99,00;2026-09-20
+HT-SPA-003;Bodyscrub Salt & Fyr 300 ml;35;SPA;229,00;2026-09-27
+HT-EXT-001;Ansigtsserum 30 ml (Lumi Nordic);20;SPA;349,00;2026-09-27
+HT-GAVE-001;Gaveæske Spa Deluxe;20;RECEP;695,00;2026-09-30</script>
+<script type="text/plain" id="eksempel-salg-2">Kode;Beskrivelse;Styk;Beløb
+HT-SPA-002;Shampoo Birk 250 ml;150;23.850,00
+HT-SPA-005;Badesalt Havbris 400 g;80;10.320,00
+HT-TEX-001;Badekåbe frotté med logo;24;19.176,00
+HT-GAVE-002;Gavekort i papæske;95;47.500,00</script>
+<script>
+(() => {
+'use strict';
+/* ========= Konstanter (datamodel efter beslutningslog Å-08) ========= */
+const KEY = 'emballagemappen-v0';
+const ORDNINGER = { vana: 'VANA', ei: 'Emballage Indberetning', erp: 'ERP Denmark', retur: 'Retur' };
+const MATERIALER = ['PET','HDPE','PP','LDPE','Plastfolie','Skumplast (EPS/PS)','Anden plast','Pap','Papir','Glas','Aluminium','Jern/stål','Træ','Tekstil','Drikkevarekarton','Komposit','Andet'];
+const GRUPPE = { PET:'Plast', HDPE:'Plast', PP:'Plast', LDPE:'Plast', 'Plastfolie':'Plast', 'Skumplast (EPS/PS)':'Plast', 'Anden plast':'Plast', Pap:'Pap', Papir:'Papir', Glas:'Glas', Aluminium:'Metal', 'Jern/stål':'Metal', 'Træ':'Træ', Tekstil:'Tekstil', Drikkevarekarton:'Komposit', Komposit:'Komposit', Andet:'Andet' };
+/* Mapping til VANA's 16 kategorier (vana.dk, rapportering af engangsemballager, 26. aug. 2026). Komposit skal afklares med VANA. */
+const VANA = { PET:'Hård PET', HDPE:'Hård plast', PP:'Hård plast', 'Anden plast':'Hård plast', LDPE:'Fleksibel plast', 'Plastfolie':'Fleksibel plast', 'Skumplast (EPS/PS)':'Skumplast', Pap:'Pap', Papir:'Papir', Glas:'Glas', Aluminium:'Aluminium', 'Jern/stål':'Jernholdige metaller', 'Træ':'Træ', Tekstil:'Tekstil', Drikkevarekarton:'Mad- og drikkevarekartoner', Komposit:'Afklar: komposit', Andet:'Andet' };
+const VANA_ORDER = ['Pap','Papir','Jernholdige metaller','Aluminium','Glas','Fleksibel plast','Hård plast','Hård PET','Skumplast','Mad- og drikkevarekartoner','Træ','Tekstil','Porcelæn','Kork','Keramik','Andet','Afklar: komposit'];
+const PA = { ja:'Ja – vi er producent', 'ja-importoer':'Ja – vi er importør', 'nej-leverandoer':'Nej – leverandøren er producent', 'nej-service':'Nej – serviceemballage uden vores logo', 'undtaget-pant':'Undtaget – pantbelagt (Dansk Retursystem)', uafklaret:'Uafklaret' };
+const PA_KORT = { ja:'Ja', 'ja-importoer':'Ja (importør)', 'nej-leverandoer':'Nej (leverandør)', 'nej-service':'Nej (service)', 'undtaget-pant':'Undtaget (pant)', uafklaret:'Uafklaret' };
+const EMBTYPE = { primaer:'Primær', transport:'Transport', service:'Service' };
+const KTYPE = { husholdning:'Husholdning', erhverv:'Erhverv', undtaget:'Undtaget (pant)' };
+const KILDE = { leverandoer:'Leverandøroplyst', vejet:'Vejet selv', estimat:'Estimat', testdata:'Testdata', ukendt:'Ukendt' };
+const GRAD = { ukendt:'Ukendt', groen:'Grøn', gul:'Gul', roed:'Rød' };
+const STATUS = { komplet:['Komplet','ok'], delvist:['Delvist','warn'], mangler:['Mangler','err'], 'ikke-relevant':['Ikke relevant','neu'], uafklaret:['Uafklaret','warn'] };
+
+/* ========= Kerne: parsing, mapping, beregning, eksport (kan køres i Node) ========= */
+const norm = h => String(h||'').toLowerCase().replace(/[^a-z0-9æøå]/g,'');
+function parseCSV(text){
+  text = String(text||'').replace(/^﻿/,'');
+  const first = text.split(/\r?\n/,1)[0] || '';
+  const cands = [';',',','\t'].map(d => [d,(first.split(d).length-1)]).sort((a,b)=>b[1]-a[1]);
+  const delim = cands[0][1] > 0 ? cands[0][0] : ';';
+  const rows=[]; let row=[], field='', inQ=false;
+  for (let i=0;i<text.length;i++){
+    const c=text[i];
+    if (inQ){ if (c==='"'){ if (text[i+1]==='"'){ field+='"'; i++; } else inQ=false; } else field+=c; }
+    else if (c==='"') inQ=true;
+    else if (c===delim){ row.push(field); field=''; }
+    else if (c==='\n'){ row.push(field); rows.push(row); row=[]; field=''; }
+    else if (c==='\r'){ /* ignorer */ }
+    else field+=c;
+  }
+  if (field.length || row.length){ row.push(field); rows.push(row); }
+  const ne = rows.filter(r => r.some(v => String(v).trim()!==''));
+  const headers = (ne.shift()||[]).map(h => h.trim());
+  return { delim, headers, rows: ne.map(r => Object.fromEntries(headers.map((h,i)=>[h,(r[i]??'').trim()]))) };
+}
+/* Dansk først: komma er decimaltegn ("0,005"), punktum i et dansk tal er tusindtalspunktum ("1.148"). Begge tegn: det sidste er decimaltegnet. */
+function toNumber(s){
+  if (typeof s==='number') return s;
+  s = String(s??'').trim().replace(/\s/g,'');
+  if (!s) return NaN;
+  const hasC = s.includes(','), hasD = s.includes('.');
+  if (hasC && hasD) return s.lastIndexOf(',') > s.lastIndexOf('.') ? parseFloat(s.replace(/\./g,'').replace(',','.')) : parseFloat(s.replace(/,/g,''));
+  if (hasC) return /^-?\d{1,3}(,\d{3}){2,}$/.test(s) ? parseFloat(s.replace(/,/g,'')) : parseFloat(s.replace(',','.'));
+  if (hasD && /^-?\d{1,3}(\.\d{3})+$/.test(s)) return parseFloat(s.replace(/\./g,''));
+  return parseFloat(s);
+}
+function mapMateriale(materiale, detalje){
+  const m = norm(materiale), d = String(detalje||'').toLowerCase();
+  if (/\bpet\b/.test(d) || m==='pet') return 'PET';
+  if (/hdpe|pe-hd/.test(d)) return 'HDPE';
+  if (/ldpe|pe-ld/.test(d)) return 'LDPE';
+  if (/folie|film/.test(d) && /plast|pp|pe|pet/.test(m+d)) return 'Plastfolie';
+  if (/eps|skum|styropor/.test(d)) return 'Skumplast (EPS/PS)';
+  if (/\bpp\b|polypropyl/.test(d) && !/pap|papir/.test(m)) return 'PP';
+  if (/plast/.test(m)) return 'Anden plast';
+  if (/komposit|laminat|belæg|belaeg/.test(m)) return 'Komposit';
+  if (/drikkevarekarton|kartoner/.test(m)) return 'Drikkevarekarton';
+  if (/alu/.test(m) || (/metal/.test(m) && /alu/.test(d))) return 'Aluminium';
+  if (/jern|stål|staal|metal/.test(m)) return 'Jern/stål';
+  if (m==='pap' || /bølgepap|boelgepap|karton|massivpap/.test(m)) return 'Pap';
+  if (/papir/.test(m)) return 'Papir';
+  if (/glas/.test(m)) return 'Glas';
+  if (/træ|trae/.test(m)) return 'Træ';
+  if (/tekstil|textil/.test(m)) return 'Tekstil';
+  return 'Andet';
+}
+function mapPA(s){
+  s = String(s||'').toLowerCase();
+  if (s.startsWith('ja')) return s.includes('import') ? 'ja-importoer' : 'ja';
+  if (s.includes('pant')) return 'undtaget-pant';
+  if (s.includes('service')) return 'nej-service';
+  if (s.startsWith('nej')) return 'nej-leverandoer';
+  return 'uafklaret';
+}
+let _id = 0; const nyId = () => 'k' + (++_id) + '-' + Math.random().toString(36).slice(2,7);
+function importKombineret(text, { defaultKilde='ukendt' } = {}){
+  const { headers, rows } = parseCSV(text);
+  const H = Object.fromEntries(headers.map(h => [norm(h), h]));
+  const col = (...names) => { for (const n of names){ if (H[n]) return H[n]; } return null; };
+  const cNr = col('varenummer','varenr','itemno','sku'), cKomp = col('komponent'), cMat = col('materiale'), cG = col('vaegtgprstk','vaegtg','gram','vægt');
+  if (!cNr || !cKomp || !cMat || !cG) return { fejl: 'Filen ligner ikke en emballagetabel. Jeg skal bruge kolonnerne varenummer, komponent, materiale og vaegt_g_pr_stk.', headers };
+  const cNavn = col('varenavn','navn'), cKat = col('varekategori'), cLev = col('leverandoer','leverandør'), cLand = col('leverandoerland'), cPL = col('privatelabel'), cPA = col('hotelerproducent','producentansvar'), cDet = col('materialedetalje'), cAntal = col('antalprsalgsenhed'), cET = col('emballagetype'), cHE = col('husholdningerhverv','type'), cNote = col('klassificeringsnote','begrundelse'), cKilde = col('kilde'), cDato = col('dato');
+  const q = ['solgtq1','solgtq2','solgtq3','solgtq4'].map(k => H[k] || null), cSolgt = col('solgt','solgtantal','antal');
+  const varer = new Map();
+  for (const r of rows){
+    const nr = r[cNr]; if (!nr) continue;
+    if (!varer.has(nr)) varer.set(nr, {
+      varenummer: nr, varenavn: cNavn ? r[cNavn] : nr, varekategori: cKat ? r[cKat] : '', leverandoer: cLev ? r[cLev] : '', leverandoerLand: cLand ? r[cLand] : '',
+      privateLabel: cPL ? /^ja/i.test(r[cPL]) : false, producentansvar: cPA ? mapPA(r[cPA]) : 'uafklaret', begrundelse: cNote ? r[cNote] : '',
+      solgt: q.every(Boolean) ? q.map(c => toNumber(r[c]) || 0) : [ cSolgt ? (toNumber(r[cSolgt]) || 0) : 0, 0, 0, 0 ],
+      komponenter: [], sidstAendret: null,
+    });
+    const he = cHE ? r[cHE] : '', et = cET ? r[cET] : '';
+    const kilde = cKilde ? ({ leverandøroplyst:'leverandoer', leverandoer:'leverandoer', vejet:'vejet', 'vejet selv':'vejet', estimat:'estimat', testdata:'testdata' }[String(r[cKilde]).toLowerCase()] || 'ukendt') : defaultKilde;
+    varer.get(nr).komponenter.push({
+      id: nyId(), navn: r[cKomp] || 'Komponent', emballagetype: /transport/i.test(et) ? 'transport' : /service/i.test(et) ? 'service' : 'primaer',
+      materiale: mapMateriale(r[cMat], cDet ? r[cDet] : ''), detalje: cDet ? r[cDet] : '', gram: toNumber(r[cG]) || 0, antalPrSalgsenhed: cAntal ? (toNumber(r[cAntal]) || 1) : 1,
+      type: /hush/i.test(he) ? 'husholdning' : /undtag|pant/i.test(he) ? 'undtaget' : 'erhverv', kilde, dato: cDato ? r[cDato] : '', miljoegraduering: 'ukendt',
+    });
+  }
+  return { varer: [...varer.values()], antalRaekker: rows.length };
+}
+function detectSalg(headers){
+  const n = headers.map(norm);
+  const find = cands => { let i = n.findIndex(h => cands.includes(h)); if (i<0) i = n.findIndex(h => cands.some(c => h.includes(c))); return i>=0 ? headers[i] : null; };
+  const q = ['solgtq1','solgtq2','solgtq3','solgtq4'].map(k => { const i = n.indexOf(k); return i>=0 ? headers[i] : null; });
+  return {
+    nr: find(['varenummer','varenr','itemno','itemnumber','sku','artikelnr','artikelnummer','varenum','item']),
+    antal: q.every(Boolean) ? null : find(['solgtantal','solgt','antal','qty','quantity','sold','maengde','mængde']),
+    navn: find(['varenavn','description','beskrivelse','itemname','navn','name']),
+    dato: find(['salgsdato','saledate','dato','date','bilagsdato','transaktionsdato','ordredato','orderdate']),
+    q: q.every(Boolean) ? q : null,
+  };
+}
+/* Dato → år og kvartal. Forstår 2026-07-31, 31-07-2026, 31.07.2026 og 31/07/26. */
+function parseDato(s){
+  s = String(s||'').trim(); let y, mo, x;
+  if ((x = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))){ y = +x[1]; mo = +x[2]; }
+  else if ((x = s.match(/^(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{4}|\d{2})\b/))){ y = +x[3]; if (y < 100) y += 2000; mo = +x[2]; }
+  else return null;
+  return (mo >= 1 && mo <= 12) ? { aar: y, maaned: mo, kvartal: Math.floor((mo - 1) / 3) } : null;
+}
+/* Salgstal pr. varenummer lægges i kvartaler: fra en datokolonne (kun rækker i indberetningsåret), fra kvartalskolonner,
+   eller i ét valgt kvartal. Kun de kvartaler, filen dækker, overskrives – resten af året røres ikke. */
+function anvendSalg(varer, rows, m, opts = {}){
+  const aar = opts.aar, k = opts.kvartal, fastQ = (Number.isInteger(k) && k >= 0 && k <= 3) ? k : 0;
+  const sums = new Map(), navne = new Map(), kvartaler = new Set();
+  let andetAar = 0, udenDato = 0, brugt = 0;
+  for (const r of rows){
+    const nr = String(r[m.nr] || '').trim(); if (!nr) continue;
+    const cur = sums.get(nr) || [0,0,0,0];
+    if (m.q){ m.q.forEach((c, i) => { cur[i] += toNumber(r[c]) || 0; kvartaler.add(i); }); }
+    else {
+      let q = fastQ;
+      if (m.dato){ const d = parseDato(r[m.dato]); if (!d){ udenDato++; continue; } if (aar && d.aar !== aar){ andetAar++; continue; } q = d.kvartal; }
+      cur[q] += toNumber(r[m.antal]) || 0; kvartaler.add(q);
+    }
+    sums.set(nr, cur); brugt++;
+    if (m.navn && r[m.navn]) navne.set(nr, r[m.navn]);
+  }
+  const kendte = [], ukendte = [];
+  for (const [nr, sum] of sums){
+    const v = varer.find(x => x.varenummer === nr);
+    if (v){ const ny = (Array.isArray(v.solgt) && v.solgt.length === 4) ? v.solgt.slice() : [0,0,0,0]; for (const q of kvartaler) ny[q] = sum[q]; v.solgt = ny; kendte.push(nr); }
+    else ukendte.push({ varenummer: nr, varenavn: navne.get(nr) || nr, solgt: sum });
+  }
+  return { kendte, ukendte, kvartaler: [...kvartaler].sort((a, b) => a - b), andetAar, udenDato, brugt };
+}
+const erProducent = v => v.producentansvar === 'ja' || v.producentansvar === 'ja-importoer';
+const solgtTotal = v => (v.solgt||[]).reduce((a,b) => a + (Number(b)||0), 0);
+const kompKg = (k, solgt) => (Number(k.gram)||0) * (Number(k.antalPrSalgsenhed)||0) * solgt / 1000;
+/* Gram summeres først, ganges så med solgt antal – én multiplikation pr. vare giver stabile decimaler (23,25 bliver ikke 23,2499…). */
+const r6 = x => Math.round(x * 1e6) / 1e6;
+function beregnVare(v){
+  const s = solgtTotal(v), g = { hus:0, erh:0 }, gMat = {};
+  for (const k of v.komponenter){
+    if (k.type === 'undtaget') continue;
+    const gram = (Number(k.gram)||0) * (Number(k.antalPrSalgsenhed)||0), slot = k.type === 'husholdning' ? 'hus' : 'erh';
+    g[slot] += gram; (gMat[k.materiale] = gMat[k.materiale] || { hus:0, erh:0 })[slot] += gram;
+  }
+  const r = { gramPrStk: r6(g.hus + g.erh), hus: r6(g.hus * s / 1000), erh: r6(g.erh * s / 1000), perMat:{}, perMatSlot:{} };
+  r.kg = r6(r.hus + r.erh);
+  for (const [m, x] of Object.entries(gMat)){ r.perMatSlot[m] = { hus: r6(x.hus * s / 1000), erh: r6(x.erh * s / 1000) }; r.perMat[m] = r6(r.perMatSlot[m].hus + r.perMatSlot[m].erh); }
+  return r;
+}
+function beregn(varer){
+  const r = { hus:0, erh:0, total:0, perGruppe:{}, perVana:{}, perVare:{}, udeladte:[], medregnet:0, uafklaret:0 };
+  for (const v of varer){
+    const vk = beregnVare(v); r.perVare[v.varenummer] = vk;
+    if (v.producentansvar === 'uafklaret') r.uafklaret++;
+    if (!erProducent(v)){ r.udeladte.push({ vare:v, aarsag: PA[v.producentansvar] || v.producentansvar, kg: vk.kg }); continue; }
+    r.medregnet++;
+    for (const [m, x] of Object.entries(vk.perMatSlot)){
+      const g = GRUPPE[m] || 'Andet', vc = VANA[m] || 'Andet';
+      const pg = r.perGruppe[g] = r.perGruppe[g] || { hus:0, erh:0 }, pv = r.perVana[vc] = r.perVana[vc] || { hus:0, erh:0 };
+      pg.hus += x.hus; pg.erh += x.erh; pv.hus += x.hus; pv.erh += x.erh;
+    }
+    r.hus += vk.hus; r.erh += vk.erh;
+  }
+  r.hus = r6(r.hus); r.erh = r6(r.erh); r.total = r6(r.hus + r.erh); return r;
+}
+function status(v){
+  if (v.producentansvar === 'uafklaret') return 'uafklaret';
+  if (!erProducent(v)) return 'ikke-relevant';
+  const ks = v.komponenter.filter(k => k.type !== 'undtaget');
+  if (!ks.length) return 'mangler';
+  if (ks.some(k => !(Number(k.gram) > 0) || !k.materiale || k.kilde === 'ukendt')) return 'delvist';
+  return 'komplet';
+}
+const r1 = n => Math.round((Number(n)||0) * 10 + 1e-6) / 10; /* 1e-6 retter flydende-komma-støj lige under ,x5 */
+const fmt1 = n => r1(n).toFixed(1).replace('.', ',');
+function eksportCSV(res, ordning, format){
+  const d = ';', nl = '\r\n', L = [];
+  if (format === 'samlet'){
+    L.push(['Emballagetype','Kg'].join(d)); L.push(['Husholdningsemballage', fmt1(res.hus)].join(d)); L.push(['Erhvervsemballage', fmt1(res.erh)].join(d));
+  } else if (ordning === 'vana'){
+    L.push(['Materialekategori','Husholdning_kg','Erhverv_kg'].join(d));
+    for (const c of VANA_ORDER){ const x = res.perVana[c]; if (x) L.push([c, fmt1(x.hus), fmt1(x.erh)].join(d)); }
+  } else {
+    L.push(['Materialegruppe','Husholdning_kg','Erhverv_kg'].join(d));
+    for (const g of Object.keys(res.perGruppe).sort()) L.push([g, fmt1(res.perGruppe[g].hus), fmt1(res.perGruppe[g].erh)].join(d));
+  }
+  return '﻿' + L.join(nl) + nl;
+}
+function dokumentationCSV(varer, res){
+  const esc = s => { s = String(s??''); return /[;"\r\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s; };
+  const L = [['varenummer','varenavn','leverandoer','producentansvar','begrundelse','status','solgt_i_alt','kg_husholdning','kg_erhverv','komponenter'].join(';')];
+  for (const v of varer){ const k = res.perVare[v.varenummer] || { hus:0, erh:0 };
+    L.push([v.varenummer, v.varenavn, v.leverandoer, PA[v.producentansvar]||v.producentansvar, v.begrundelse, STATUS[status(v)][0], solgtTotal(v), fmt1(k.hus), fmt1(k.erh), v.komponenter.map(c => `${c.navn} ${c.materiale} ${fmt1(c.gram)} g ×${c.antalPrSalgsenhed} (${KTYPE[c.type]}, ${KILDE[c.kilde]||c.kilde})`).join(' | ')].map(esc).join(';')); }
+  return '﻿' + L.join('\r\n') + '\r\n';
+}
+const Core = { parseCSV, toNumber, parseDato, mapMateriale, mapPA, importKombineret, detectSalg, anvendSalg, beregn, beregnVare, status, eksportCSV, dokumentationCSV, fmt1, VANA, GRUPPE, MATERIALER };
+if (typeof module !== 'undefined' && module.exports) module.exports = Core;
+if (typeof document === 'undefined') return;
+
+/* ========= Tilstand ========= */
+const state = { ordning:'vana', aar:2026, varer:[], log:[], import:null,
+  ui:{ page:'varer', valgt:null, soeg:'', filterPA:'alle', filterStatus:'alle', kunMangler:false, format:'detaljeret', bekraeftNulstil:false, kilde:null } };
+function gem(){ try { localStorage.setItem(KEY, JSON.stringify({ ordning:state.ordning, aar:state.aar, varer:state.varer, log:state.log })); state.ui.gemt = true; } catch(e){ state.ui.gemt = false; } }
+function hent(){ try { const s = JSON.parse(localStorage.getItem(KEY)||'null'); if (s && Array.isArray(s.varer)){ state.varer = s.varer; state.log = s.log||[]; state.ordning = s.ordning||'vana'; state.aar = s.aar||2026; state.ui.gemt = true; } } catch(e){ state.ui.gemt = false; } }
+function logg(hvad){ state.log.unshift({ tid: new Date().toISOString(), hvad }); if (state.log.length > 200) state.log.length = 200; }
+
+/* ========= Formatering ========= */
+const nfKg = new Intl.NumberFormat('da-DK', { minimumFractionDigits:1, maximumFractionDigits:1 });
+const nfInt = new Intl.NumberFormat('da-DK');
+const kg = n => nfKg.format(r1(n));
+const tal = n => nfInt.format(Number(n)||0);
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const dato = iso => { const d = iso ? new Date(iso) : new Date(); return d.toLocaleDateString('da-DK', { day:'numeric', month:'short', year:'numeric' }) + (iso ? ' · ' + d.toLocaleTimeString('da-DK', { hour:'2-digit', minute:'2-digit' }) : ''); };
+const chip = (txt, tone) => `<span class="chip ${tone}">${esc(txt)}</span>`;
+const statusChip = v => { const [t, tone] = STATUS[status(v)]; return chip(t, tone); };
+const paChip = v => { const p = v.producentansvar; const tone = erProducent(v) ? 'ok' : p === 'uafklaret' ? 'warn' : 'neu'; return chip(PA_KORT[p]||p, tone); };
+const sel = (name, opts, val, cls='in sm', attrs='') => `<select class="${cls}" ${attrs} data-felt="${name}">${Object.entries(opts).map(([k,v]) => `<option value="${esc(k)}" ${k===val?'selected':''}>${esc(v)}</option>`).join('')}</select>`;
+
+/* ========= Visning ========= */
+const app = document.getElementById('app');
+function render(){
+  const res = beregn(state.varer);
+  const p = state.ui.page;
+  app.innerHTML = `
+  <nav class="side" aria-label="Hovedmenu">
+    <div class="mark">Emballagemappen</div>
+    <div class="sub">Hotel Test A/S · prototype v0</div>
+    <div class="nav">
+      ${[['varer','Varer'],['beregning','Beregning og eksport'],['test','Sådan tester du']].map(([k,l]) => `<button class="navbtn ${p===k||(k==='varer'&&p==='vare')?'on':''}" data-nav="${k}"><span class="dot"></span>${l}</button>`).join('')}
+    </div>
+    <div class="trust"><b><span class="lock"></span>Dine data bliver på din computer</b><p>Alt gemmes lokalt i din browser. Intet sendes til en server.${state.ui.gemt === false ? ' <strong>Browseren kunne ikke gemme – hent en sikkerhedskopi før du lukker.</strong>' : ''}</p></div>
+    <div class="meta">Ordning: ${ORDNINGER[state.ordning]} · Indberetningsår ${state.aar}</div>
+  </nav>
+  <main id="main">${p === 'vare' ? visVare(res) : p === 'beregning' ? visBeregning(res) : p === 'test' ? visTest() : visVarer(res)}</main>`;
+}
+function kpis(res){
+  const n = state.varer.length, mangler = state.varer.filter(v => ['mangler','delvist'].includes(status(v))).length;
+  const under = res.total < 8000;
+  return `<div class="kpis">
+    <div class="card pad"><div class="ov">Husholdningsemballage</div><div class="stat"><b>${kg(res.hus)}</b><span>kg</span></div><div class="hint">Emballage gæsten tager med hjem</div></div>
+    <div class="card pad"><div class="ov">Erhvervsemballage</div><div class="stat"><b>${kg(res.erh)}</b><span>kg</span></div><div class="hint">Bliver til affald på hotellet</div></div>
+    <div class="card pad"><div class="ov">Varer</div><div class="stat"><b>${n}</b><span>${res.medregnet} med producentansvar</span></div><div class="hint">${mangler} mangler eller har delvise emballagedata${res.uafklaret ? ` · ${res.uafklaret} uafklaret` : ''}</div></div>
+    <div class="card pad ${n ? (under ? 'tint-ok' : 'tint-warn') : ''}"><div class="ov">I alt ${state.aar}</div><div class="stat"><b>${kg(res.total)}</b><span>kg</span></div><div class="hint">${!n ? 'Importér varer for at se, om I kan bruge forenklet indberetning.' : under ? 'Under 8 ton → forenklet indberetning er tilladt (kun husholdning/erhverv). VANA: kvartalsvis.' : 'Over 8 ton → detaljeret indberetning pr. materialekategori. VANA: månedligt.'}</div></div>
+  </div>`;
+}
+function visVarer(res){
+  const u = state.ui;
+  let liste = state.varer.filter(v => {
+    const s = u.soeg.trim().toLowerCase();
+    if (s && !(v.varenavn.toLowerCase().includes(s) || v.varenummer.toLowerCase().includes(s) || (v.leverandoer||'').toLowerCase().includes(s))) return false;
+    if (u.filterPA === 'producent' && !erProducent(v)) return false;
+    if (u.filterPA === 'ikke' && erProducent(v)) return false;
+    if (u.filterPA === 'uafklaret' && v.producentansvar !== 'uafklaret') return false;
+    if (u.filterStatus !== 'alle' && status(v) !== u.filterStatus) return false;
+    if (u.kunMangler && !['mangler','delvist','uafklaret'].includes(status(v))) return false;
+    return true;
+  });
+  const imp = state.import;
+  return `
+  <header class="page"><div><div class="crumb">Hotel Test A/S · Indberetningsår ${state.aar}</div><h1>Varer</h1></div>
+    <div class="actions">
+      <button class="btn" data-action="indlaes-testdata">Indlæs testdata (22 varer)</button>
+      <button class="btn pri" data-action="vaelg-fil">Importér CSV</button>
+    </div></header>
+  ${kpis(res)}
+  <div class="drop" id="drop"><div style="display:flex;align-items:center;gap:14px;min-width:0"><div class="ico">.csv</div><div><b>Træk en CSV-fil hertil, eller vælg en fil</b><small>Emballagetabel (som testdata) eller salgseksport med varenummer og antal · Behandles kun lokalt i din browser${state.ui.kilde ? ' · Seneste import: ' + esc(state.ui.kilde) : ''}</small></div></div><button class="btn sm" data-action="vaelg-fil">Vælg fil</button></div>
+  ${imp ? visImport(imp) : ''}
+  ${!state.varer.length ? `<div class="card"><div class="empty"><div class="ico">.csv</div><h2>Start med at importere din salgseksport – eller indlæs testdata</h2><p>Vi genkender varenummer, varenavn og solgt antal. Emballagedata lægger du på hver vare bagefter, eller du importerer en emballagetabel som testdatasættet.</p><div class="actions" style="margin-top:8px"><button class="btn pri" data-action="indlaes-testdata">Indlæs testdata</button><button class="btn" data-action="vaelg-fil">Vælg CSV-fil</button></div><small style="color:var(--text3)">Filen behandles kun i din browser og sendes ikke videre.</small></div></div>
+  <div class="steps"><div class="s"><b>1</b><strong>Importér salg</strong><p>Varer og solgt antal kommer fra din salgseksport.</p></div><div class="s"><b>2</b><strong>Læg emballagedata på</strong><p>Spørg leverandøren, vej selv eller skriv et estimat – med kilde og dato.</p></div><div class="s"><b>3</b><strong>Eksportér</strong><p>Vi beregner kg pr. materiale og laver filen til din ordning.</p></div></div>` : `
+  <div class="tools">
+    <input class="in search" id="soeg" type="search" placeholder="Søg på varenavn, varenr. eller leverandør" value="${esc(u.soeg)}" aria-label="Søg">
+    <select class="ctl" data-ui="filterPA" aria-label="Filter: producentansvar"><option value="alle" ${u.filterPA==='alle'?'selected':''}>Producentansvar: alle</option><option value="producent" ${u.filterPA==='producent'?'selected':''}>Kun med producentansvar</option><option value="ikke" ${u.filterPA==='ikke'?'selected':''}>Kun uden producentansvar</option><option value="uafklaret" ${u.filterPA==='uafklaret'?'selected':''}>Kun uafklarede</option></select>
+    <select class="ctl" data-ui="filterStatus" aria-label="Filter: emballagedata"><option value="alle" ${u.filterStatus==='alle'?'selected':''}>Emballagedata: alle</option>${Object.entries(STATUS).map(([k,[t]]) => `<option value="${k}" ${u.filterStatus===k?'selected':''}>${t}</option>`).join('')}</select>
+    <label class="tog"><input type="checkbox" data-ui="kunMangler" ${u.kunMangler?'checked':''} style="accent-color:var(--accent)"> Vis kun varer der mangler noget</label>
+  </div>
+  <div class="card"><div class="tablewrap"><table class="varer">
+    <thead><tr><th>Varenavn</th><th>Varenr.</th><th>Leverandør</th><th>Producentansvar</th><th>Emballagedata</th><th class="num">Solgt</th><th class="num">kg i alt</th></tr></thead>
+    <tbody>${liste.map(v => { const k = res.perVare[v.varenummer]; const prod = erProducent(v); return `<tr class="row" tabindex="0" data-open="${esc(v.varenummer)}" aria-label="Åbn ${esc(v.varenavn)}">
+      <td class="name">${esc(v.varenavn)}<small>${esc(v.varekategori||'')}</small></td><td class="mono">${esc(v.varenummer)}</td><td>${esc(v.leverandoer||'–')}</td><td>${paChip(v)}</td><td>${statusChip(v)}</td><td class="num">${tal(solgtTotal(v))}</td><td class="num ${prod ? '' : 'muted'}">${k.kg || prod ? kg(k.kg) : '–'}${prod ? '' : ' <span class="sr">ikke medregnet</span>'}</td></tr>`; }).join('') || `<tr><td colspan="7" style="text-align:center;color:var(--text3);height:72px">Ingen varer matcher filtrene.</td></tr>`}</tbody>
+  </table></div>
+  <div class="cfoot"><div>${liste.length} af ${state.varer.length} varer vist · tal i kursiv tæller ikke med (ikke vores producentansvar)</div><div>Medregnet i alt <b style="color:var(--text)">${kg(res.total)} kg</b></div></div></div>
+  <div class="card" style="margin-top:20px"><div class="chead"><div><h2>Seneste ændringer</h2><p>Hvad der er ændret, hvornår. Loggen følger med i sikkerhedskopien.</p></div><div class="actions"><button class="btn sm" data-action="eksport-backup">Hent sikkerhedskopi (JSON)</button><button class="btn sm" data-action="vaelg-json">Indlæs sikkerhedskopi</button><button class="btn sm danger" data-action="nulstil">${u.bekraeftNulstil ? 'Klik igen for at slette alt' : 'Nulstil'}</button></div></div>
+  <ul class="log">${state.log.slice(0,8).map(l => `<li><time datetime="${esc(l.tid)}">${dato(l.tid)}</time><span>${esc(l.hvad)}</span></li>`).join('') || '<li><span style="color:var(--text3)">Ingen ændringer endnu.</span></li>'}</ul></div>`}`;
+}
+function visImport(imp){
+  if (imp.fejl) return `<div class="note" style="margin-bottom:16px"><b>Kunne ikke importere.</b> ${esc(imp.fejl)} Kolonner i filen: ${imp.headers.map(esc).join(', ') || 'ingen'}. <button class="btn sm" data-action="annuller-import" style="margin-left:8px">Luk</button></div>`;
+  if (imp.trin === 'mapping'){
+    const mp = imp.mapping, foerste = imp.rows[0] || {};
+    const opt = (val) => `<option value="">Vælg kolonne …</option>${imp.headers.map(h => `<option value="${esc(h)}" ${h===val?'selected':''}>${esc(h)}</option>`).join('')}`;
+    const datoKol = imp.headers.filter(h => parseDato(foerste[h]));
+    const perOpt = `<option value="">Vælg periode …</option>`
+      + datoKol.map(h => `<option value="col:${esc(h)}" ${mp.periode==='col:'+h?'selected':''}>Datoen i kolonnen "${esc(h)}"</option>`).join('')
+      + [0,1,2,3].map(q => `<option value="q:${q}" ${mp.periode==='q:'+q?'selected':''}>Hele filen er ${q+1}. kvartal ${state.aar}</option>`).join('');
+    const klar = !!(mp.nr && mp.antal && mp.periode);
+    const kunPeriode = !!(imp.auto && imp.auto.nr && imp.auto.antal);
+    const felt = (k, l) => `<label style="display:grid;gap:6px;font-size:13px;font-weight:500">${l}<select class="ctl" data-map="${k}">${opt(mp[k])}</select><span style="font-weight:400;color:var(--text3);font-size:12.5px">${mp[k] ? 'Eksempel: ' + esc(foerste[mp[k]] ?? '') : ''}</span></label>`;
+    return `<div class="card" style="margin-bottom:16px"><div class="chead"><div><h2>${kunPeriode ? `Hvilken periode dækker ${esc(imp.navn)}?` : `Vi kunne ikke genkende alle kolonner i ${esc(imp.navn)}`}</h2><p>${imp.rows.length} rækker · ${imp.headers.length} kolonner. ${kunPeriode ? 'Filen har ingen datokolonne, så vælg hvilket kvartal salget hører til.' : 'Vælg hvilken kolonne der er hvad, og hvilket kvartal salget hører til.'}</p></div></div>
+      <div style="padding:16px 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+        ${felt('nr','Varenummer (påkrævet)')}${felt('antal','Solgt antal (påkrævet)')}${felt('navn','Varenavn (valgfri)')}
+        <label style="display:grid;gap:6px;font-size:13px;font-weight:500">Periode (påkrævet)<select class="ctl" data-map="periode">${perOpt}</select><span style="font-weight:400;color:var(--text3);font-size:12.5px">Salget lægges i det kvartal, du vælger. Andre kvartaler røres ikke.</span></label>
+      </div>
+      <div class="cfoot"><span style="color:var(--warn)">${klar ? 'Klar til import.' : 'Vælg varenummer, solgt antal og periode, før du kan importere.'}</span><div class="actions"><button class="btn sm" data-action="annuller-import">Annullér</button><button class="btn sm pri" data-action="anvend-mapping" ${klar ? '' : 'disabled'}>Importér ${imp.rows.length} rækker</button></div></div></div>`;
+  }
+  if (imp.trin === 'ukendte'){
+    const r = imp.resultat || { per:'', skip:'' };
+    return `<div class="card" style="margin-bottom:16px"><div class="chead"><div><h2>${imp.kendte.length} varer opdateret med salgstal${r.per ? ` (${esc(r.per)} ${state.aar})` : ''}</h2><p>${imp.ukendte.length} varenumre i filen findes ikke i mappen endnu. Vil du oprette dem uden emballagedata? De lander som "Uafklaret", så du kan tage stilling til producentansvar og emballage.${r.skip ? ' ' + esc(r.skip) : ''}</p></div></div>
+      <div style="padding:12px 22px;font-size:13.5px;color:var(--text2);max-height:160px;overflow:auto">${imp.ukendte.slice(0,40).map(u => `<div><span style="font-family:var(--font-mono);font-size:12.5px">${esc(u.varenummer)}</span> · ${esc(u.varenavn)} · ${tal(u.solgt.reduce((a,b)=>a+b,0))} stk.</div>`).join('')}${imp.ukendte.length > 40 ? `<div>… og ${imp.ukendte.length - 40} mere</div>` : ''}</div>
+      <div class="cfoot"><span></span><div class="actions"><button class="btn sm" data-action="annuller-import">Spring over</button><button class="btn sm pri" data-action="opret-nye">Opret ${imp.ukendte.length} varer</button></div></div></div>`;
+  }
+  return '';
+}
+function visVare(res){
+  const v = state.varer.find(x => x.varenummer === state.ui.valgt);
+  if (!v){ state.ui.page = 'varer'; return visVarer(res); }
+  const b = beregnVare(v), s = solgtTotal(v), prod = erProducent(v);
+  const kompRows = v.komponenter.map(k => `<tr data-komp="${k.id}">
+    <td><input class="in sm" data-felt="navn" value="${esc(k.navn)}" aria-label="Komponent"></td>
+    <td>${sel('emballagetype', EMBTYPE, k.emballagetype)}</td>
+    <td>${sel('materiale', Object.fromEntries(MATERIALER.map(m => [m,m])), k.materiale)}</td>
+    <td><input class="in sm num" data-felt="gram" inputmode="decimal" value="${esc(String(k.gram).replace('.',','))}" aria-label="Vægt i gram" ${Number(k.gram) > 0 ? '' : 'style="border-color:var(--err)"'}></td>
+    <td><input class="in sm num" data-felt="antalPrSalgsenhed" inputmode="decimal" value="${esc(String(k.antalPrSalgsenhed).replace('.',','))}" aria-label="Antal pr. salgsenhed" title="Fx 10 kapsler pr. æske eller 0,0417 transportkasse pr. stk. (1 pr. 24)"></td>
+    <td>${sel('type', KTYPE, k.type)}</td>
+    <td>${sel('kilde', KILDE, k.kilde)}</td>
+    <td>${sel('miljoegraduering', GRAD, k.miljoegraduering||'ukendt')}</td>
+    <td><input class="in sm" data-felt="dato" value="${esc(k.dato||'')}" placeholder="dd.mm.åååå" aria-label="Dato"></td>
+    <td><button class="x" data-action="fjern-komp" data-id="${k.id}" aria-label="Fjern komponent">×</button></td></tr>`).join('');
+  return `
+  <header class="page"><div><div class="crumb"><a href="#varer" data-nav="varer">Varer</a> <span style="margin:0 6px">/</span> ${esc(v.varenummer)}</div><h1>${esc(v.varenavn)}</h1></div>
+    <div class="actions"><button class="btn" data-nav="varer">Tilbage til varer</button><button class="btn pri" data-action="tilfoej-komp">+ Tilføj komponent</button></div></header>
+  <div class="metaline">
+    <div><span class="k">Varenr.</span><b style="font-weight:500;font-variant-numeric:tabular-nums">${esc(v.varenummer)}</b></div>
+    <div><span class="k">Kategori</span><input class="in sm" data-vfelt="varekategori" value="${esc(v.varekategori||'')}" style="width:200px" aria-label="Kategori"></div>
+    <div><span class="k">Leverandør</span><input class="in sm" data-vfelt="leverandoer" value="${esc(v.leverandoer||'')}" style="width:220px" aria-label="Leverandør"></div>
+    <div><span class="k">Land</span><input class="in sm" data-vfelt="leverandoerLand" value="${esc(v.leverandoerLand||'')}" style="width:110px" aria-label="Leverandørens land"></div>
+    <div><span class="k">Producentansvar</span>${paChip(v)}</div>
+    <div><span class="k">Emballagedata</span>${statusChip(v)}</div>
+  </div>
+  <div class="grid2">
+    <div class="stack">
+      <div class="card"><div class="chead"><div><h2>Emballagekomponenter</h2><p>Alt det, der er omkring selve varen, når den sælges – flaske, pumpe, etiket, æske, transportkasse. Vægt pr. stk. af komponenten.</p></div><button class="btn sm" data-action="tilfoej-komp">+ Tilføj komponent</button></div>
+        <div class="tablewrap"><table class="komp"><thead><tr><th>Komponent</th><th>Emballagetype</th><th>Materiale</th><th class="num">Vægt (g)</th><th class="num">Antal pr. stk.</th><th>Hush./Erhverv</th><th>Kilde</th><th>Miljøgrad.</th><th>Dato</th><th></th></tr></thead>
+        <tbody>${kompRows || `<tr><td colspan="10" style="text-align:center;color:var(--text3);height:72px">Ingen komponenter endnu. Tilføj flaske, låg, etiket …</td></tr>`}</tbody></table></div>
+        <div class="cfoot" id="komp-foot"><div>${v.komponenter.length} komponenter</div><div>Emballage pr. stk. <b style="color:var(--text)">${kg(b.gramPrStk)} g</b></div></div></div>
+      <div class="card pad"><div class="ov">Begrundelse og dokumentation</div><p class="hint" style="margin:6px 0 10px">Hvorfor er producentansvaret som det er? Hvem oplyste vægtene? Det her er teksten, du viser, hvis nogen spørger.</p><textarea class="in" data-vfelt="begrundelse" aria-label="Begrundelse">${esc(v.begrundelse||'')}</textarea></div>
+    </div>
+    <div class="stack">
+      <div class="card pad" id="calc">${visCalc(v, b, s, prod)}</div>
+      <div class="card pad"><div class="ov">Producentansvar</div><div class="radios">${Object.entries(PA).map(([k,l]) => `<label><input type="radio" name="pa" value="${k}" data-vfelt="producentansvar" ${v.producentansvar===k?'checked':''}>${esc(l)}</label>`).join('')}</div>
+        <p class="hint">Har I bestilt varen og bestemt emballagen (eget mærke), eller importeret den selv, er I som regel producent. Serviceemballage (poser, kopper) er leverandørens ansvar, medmindre den bærer jeres logo. Pantbelagt emballage hører under Dansk Retursystem.</p></div>
+      <div class="card pad"><div class="ov">Solgt antal pr. kvartal</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px">${[0,1,2,3].map(i => `<label style="display:grid;gap:4px;font-size:12.5px;color:var(--text3)">Q${i+1}<input class="in sm num" data-vq="${i}" inputmode="numeric" value="${esc(String(v.solgt[i]??0))}" aria-label="Solgt kvartal ${i+1}"></label>`).join('')}</div><p class="hint">Opdateres automatisk, når du importerer en salgseksport.</p></div>
+      ${v.sidstAendret ? `<div class="card pad" style="background:var(--surface-hover)"><b style="font-weight:600">Sidst ændret</b> <span style="color:var(--text2)">${dato(v.sidstAendret)}</span></div>` : ''}
+    </div>
+  </div>`;
+}
+function visCalc(v, b, s, prod){
+  return `<div class="ov">Beregning · opdateres løbende</div>
+    <div class="calc"><div class="k">Solgt antal i alt</div><div class="v">${tal(s)} stk.</div><div class="k">× Emballage pr. stk.</div><div class="v">${kg(b.gramPrStk)} g</div></div>
+    <div class="bigkg"><div style="font-weight:500">= kg i alt ${state.aar}</div><b>${kg(b.kg)} <small>kg</small></b></div>
+    <div class="calc" style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:13px"><div class="k">Husholdning</div><div class="v">${kg(b.hus)} kg</div><div class="k">Erhverv</div><div class="v">${kg(b.erh)} kg</div>${Object.entries(b.perMat).map(([m,x]) => `<div class="k">${esc(m)} → ${esc(VANA[m]||'Andet')}</div><div class="v">${kg(x)} kg</div>`).join('')}</div>
+    ${prod ? '' : `<p class="hint" style="margin-top:12px;color:var(--warn)">Tæller ikke med i indberetningen: ${esc(PA[v.producentansvar])}. Varen bliver i mappen som dokumentation.</p>`}`;
+}
+function visBeregning(res){
+  const grupper = Object.entries(res.perGruppe).sort((a,b) => (b[1].hus+b[1].erh) - (a[1].hus+a[1].erh));
+  const max = Math.max(1, ...grupper.map(([,x]) => Math.max(x.hus, x.erh)));
+  const w = v => v > 0 ? Math.max(1.5, v/max*100) + '%' : '0%';
+  const csv = eksportCSV(res, state.ordning, state.ui.format);
+  const vanaRows = VANA_ORDER.filter(c => res.perVana[c]).map(c => `<tr><td class="name">${esc(c)}${c.startsWith('Afklar') ? ' ' + chip('Afklar med ordningen','warn') : ''}</td><td class="num">${kg(res.perVana[c].hus)}</td><td class="num">${kg(res.perVana[c].erh)}</td><td class="num">${kg(res.perVana[c].hus+res.perVana[c].erh)}</td></tr>`).join('');
+  return `
+  <header class="page"><div><div class="crumb">Hotel Test A/S · Indberetningsår ${state.aar}</div><h1>Beregning og eksport</h1></div>
+    <div style="font-size:13px;color:var(--text2);text-align:right;line-height:1.45">Beregnet ud fra ${state.varer.length} varer, ${res.medregnet} med producentansvar.<br>Tallene opdateres, når du ændrer emballagedata.</div></header>
+  ${kpis(res)}
+  <div class="grid-eq">
+    <div class="stack">
+      <div class="card bars"><div class="chead"><div><h2>Kg pr. materialegruppe</h2><p>Kun varer med producentansvar</p></div><div class="legend"><span><i></i>Husholdning</span><span><i class="b2"></i>Erhverv</span></div></div>
+        ${grupper.map(([g,x]) => `<div class="r"><div><div class="n">${esc(g)}</div><div class="nn">${esc(Object.keys(VANA).filter(m => GRUPPE[m]===g).map(m => VANA[m]).filter((v,i,a) => a.indexOf(v)===i).join(', '))}</div></div><div class="track"><div class="bar" style="width:${w(x.hus)}" title="Husholdning ${kg(x.hus)} kg"></div><div class="bar b2" style="width:${w(x.erh)}" title="Erhverv ${kg(x.erh)} kg"></div></div><div class="v">${kg(x.hus)}</div><div class="v v2">${kg(x.erh)}</div></div>`).join('') || '<div style="padding:28px 22px;color:var(--text3);text-align:center">Ingen varer med producentansvar endnu.</div>'}
+        <div class="r" style="font-weight:600;background:var(--surface-hover);border-radius:0 0 8px 8px"><div>I alt</div><div class="v" style="text-align:right;font-weight:400;color:var(--text3);font-size:12.5px">kg</div><div class="v">${kg(res.hus)}</div><div class="v">${kg(res.erh)}</div></div></div>
+      <div class="card"><div class="chead"><div><h2>Pr. VANA-kategori</h2><p>Mapping fra vores materialer til VANA's 16 kategorier. Andre ordninger får deres egen mapping.</p></div></div>
+        <div class="tablewrap"><table class="vana"><thead><tr><th>Materialekategori</th><th class="num">Husholdning kg</th><th class="num">Erhverv kg</th><th class="num">I alt kg</th></tr></thead><tbody>${vanaRows || '<tr><td colspan="4" style="text-align:center;color:var(--text3);height:72px">Ingen data.</td></tr>'}<tr class="total"><td>I alt</td><td class="num">${kg(res.hus)}</td><td class="num">${kg(res.erh)}</td><td class="num">${kg(res.total)}</td></tr></tbody></table></div></div>
+      <div class="card"><div class="chead"><div><h2>Ikke medregnet – med begrundelse</h2><p>${res.udeladte.length} varer, hvor Hotel Test A/S ikke er producent. De bliver i mappen som dokumentation.</p></div><button class="btn sm" data-action="download-doc">Hent vareliste med begrundelser (CSV)</button></div>
+        <div class="tablewrap"><table><thead><tr><th>Vare</th><th>Hvorfor ikke</th><th class="num">kg udeladt</th></tr></thead><tbody>${res.udeladte.map(u => `<tr class="row" tabindex="0" data-open="${esc(u.vare.varenummer)}"><td class="name">${esc(u.vare.varenavn)}<small>${esc(u.vare.varenummer)} · ${esc(u.vare.leverandoer||'')}</small></td><td>${esc(u.aarsag)}</td><td class="num muted">${kg(u.kg)}</td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--text3);height:72px">Alle varer tæller med.</td></tr>'}</tbody></table></div></div>
+    </div>
+    <div class="stack">
+      <div class="card"><div class="chead"><div><h2>Eksportfil</h2><p>Vælg ordning. Skabelonerne er generiske, indtil vi har ordningernes egne filer.</p></div></div>
+        <div style="padding:16px 22px">
+          <div class="ordn">${Object.entries(ORDNINGER).map(([k,l]) => `<label class="${state.ordning===k?'on':''}"><input type="radio" name="ordning" value="${k}" data-ui="ordning" ${state.ordning===k?'checked':''}>${l}</label>`).join('')}</div>
+          <div class="radios" style="margin-top:14px"><label><input type="radio" name="format" value="detaljeret" data-ui="format" ${state.ui.format==='detaljeret'?'checked':''}>Detaljeret – pr. materialekategori${state.ordning==='vana' ? ' (VANA, 16 kategorier)' : ' (vores grupper – skabelon mangler)'}</label><label><input type="radio" name="format" value="samlet" data-ui="format" ${state.ui.format==='samlet'?'checked':''}>Samlet – kun husholdning/erhverv (tilladt under 8 ton)</label></div>
+          ${state.ordning !== 'vana' ? `<div class="note" style="margin-top:14px"><b>Skabelon mangler for ${ORDNINGER[state.ordning]}.</b> Filen bruger vores egne materialegrupper, indtil vi har ordningens skabelon. Tallene er de samme.</div>` : `<div class="hint" style="margin-top:12px">VANA tager imod CSV-upload i deres egen medlemsskabelon (hentes i Medlemsportalen, må ikke ændres). Når vi har den, mappes kolonnerne her. Kilde: vana.dk, 26. aug. 2026.</div>`}
+          <pre class="csv" id="csv-preview" aria-label="Forhåndsvisning af eksportfil">${esc(csv.replace('﻿',''))}</pre>
+          <div class="actions" style="margin-top:14px"><button class="btn pri" data-action="download-csv">Download CSV</button><button class="btn" data-action="kopier-csv">Kopiér som tekst</button></div>
+          <div class="foot"><span class="lock"></span>Filen laves i din browser. Du uploader den selv i ordningens portal – intet sendes herfra. Virker download ikke, så brug "Kopiér som tekst".</div>
+        </div></div>
+      <div class="card pad"><div class="ov">Frister (pr. ordning)</div><p class="hint" style="margin-top:8px">Årlig indberetning af ${state.aar}-mængder til DPA: 1. januar – 31. maj ${state.aar+1}. VANA-medlemmer rapporterer desuden løbende til VANA: kvartalsvis under 8 ton, månedligt over. Datoerne skal ligge i ordningens skabelon – de står her kun som tekst.</p></div>
+    </div>
+  </div>`;
+}
+function visTest(){
+  return `
+  <header class="page"><div><div class="crumb">Prototype v0 · ${dato()}</div><h1>Sådan tester du</h1></div></header>
+  <div class="grid-eq">
+    <div class="card pad test"><h2 style="margin-bottom:12px">10 trin – tager 20 minutter</h2>
+      <ol>
+        <li><b>Indlæs testdata</b> på siden Varer.<small>Forvent 22 varer og i alt 1.470,0 kg: 715,8 kg husholdning og 754,2 kg erhverv. 15 varer med producentansvar, 7 uden.</small></li>
+        <li><b>Søg "gave"</b> og brug filtrene.<small>To varer. Filtret "Kun uden producentansvar" skal give 7 varer: 5 leverandør, 1 pant, 1 serviceemballage.</small></li>
+        <li><b>Åbn HT-SPA-001</b> og ret pumpen fra 6 til 8 g.<small>kg i alt stiger live fra 21,7 til 23,3. Gå tilbage: totalen på Varer er nu 1.471,5 kg (før 1.470,0), og ændringen står i loggen nederst.</small></li>
+        <li><b>Tilføj en komponent</b> (fx "Æske", Pap, 25 g).<small>Vægt pr. stk. og kg opdateres. Fjern den igen med ×.</small></li>
+        <li><b>Åbn HT-EXT-002</b> (svensk badeolie) og skift producentansvar til "Nej – leverandøren er producent".<small>Varen ryger ud af totalen og lander under "Ikke medregnet – med begrundelse" på Beregning. Skriv begrundelsen i tekstfeltet.</small></li>
+        <li><b>Åbn HT-VAND-001</b> (kildevand med pant).<small>Komponenterne står som "Undtaget (pant)" og tæller ikke – uanset hvad producentansvaret er sat til.</small></li>
+        <li><b>Gå til Beregning og eksport.</b><small>Plast skal være størst (ca. 652 kg). "Afklar: komposit" er markeret – det er badesaltposen og take-away-koppen.</small></li>
+        <li><b>Skift mellem Detaljeret og Samlet</b> og mellem ordninger.<small>Samlet giver to linjer. Andre ordninger end VANA viser en advarsel om manglende skabelon. Kopiér teksten og sæt den ind i Excel: semikolon og komma-decimaler skal lande rigtigt.</small></li>
+        <li><b>Importér en salgseksport.</b><div class="actions" style="margin:8px 0 2px"><button class="btn sm" data-action="eksempel-salg" data-nr="1">Prøv eksempel 1: kassesystem</button><button class="btn sm" data-action="eksempel-salg" data-nr="2">Prøv eksempel 2: ukendte kolonner</button></div><small>Eksempel 1 genkendes automatisk, og datoerne lægger salget i 3. kvartal: Bodylotion (HT-SPA-001) går fra 210 til 240 i Q3, og en ny vare (Håndcreme Tang) tilbydes oprettet som "Uafklaret". I eksempel 2 vælger du selv, hvilken kolonne der er varenummer og antal, og hvilket kvartal filen dækker – vælg 2. kvartal. Brug kun testfiler, ikke hotellets rigtige salgsdata.</small></li>
+        <li><b>Hent en sikkerhedskopi</b> (JSON), nulstil mappen og indlæs kopien igen.<small>Alt skal være som før, inkl. ændringsloggen. Luk fanen og åbn igen: data er der stadig (gemt i browseren).</small></li>
+      </ol></div>
+    <div class="stack">
+      <div class="card pad"><div class="ov">Mens du tester</div><p class="hint" style="margin-top:8px">Sig højt, hvad du tænker, mens du klikker. Sidder der en med, hjælper vedkommende ikke – men skriver ned.<br><br>Notér tre ting: hvor du tøver eller gætter, ord du ikke forstår, og hvad der mangler, før du ville bruge det på en rigtig vare.</p></div>
+      <div class="card pad"><div class="ov">Når du er færdig</div><p class="hint" style="margin-top:8px">Send noterne til Oliver, eller skriv dem i en ny samtale i projektet "VANA Indberetning App" i Claude. Send gerne sikkerhedskopien (JSON) med: ændringsloggen viser præcis, hvad du gjorde.</p></div>
+      <div class="card pad"><div class="ov">Hvad v0 ikke kan endnu</div><p class="hint" style="margin-top:8px">Excel-filer direkte (gem som CSV først) · ordningernes rigtige skabeloner · leverandørforespørgsler · stykliste for gaveæsker · flere brugere · bilag.</p></div>
+      <div class="card pad"><div class="ov">Hvor data ligger</div><p class="hint" style="margin-top:8px">Kun i denne browser. Rydder du browserdata, er mappen væk – hent en sikkerhedskopi efter hver test. Testdata er syntetiske ("Hotel Test A/S").</p></div>
+    </div>
+  </div>`;
+}
+
+/* ========= Handlinger ========= */
+function vaelgVare(nr){ state.ui.valgt = nr; state.ui.page = 'vare'; render(); window.scrollTo(0,0); }
+function indlaesTestdata(){
+  const txt = document.getElementById('testdata-csv').textContent;
+  const r = importKombineret(txt, { defaultKilde:'testdata' });
+  state.varer = r.varer; state.import = null; state.ui.kilde = 'testdata (indlejret)';
+  logg(`Indlæste testdata: ${r.varer.length} varer, ${r.antalRaekker} komponentrækker`); gem(); render(); toast(`${r.varer.length} varer indlæst`);
+}
+function haandterCSV(navn, text){
+  const parsed = parseCSV(text);
+  const H = parsed.headers.map(norm);
+  if (H.includes('komponent') && H.some(h => h.startsWith('vaegt') || h === 'gram')){
+    const r = importKombineret(text, { defaultKilde:'ukendt' });
+    if (r.fejl){ state.import = { fejl:r.fejl, headers:parsed.headers }; render(); return; }
+    const nye = r.varer.filter(v => !state.varer.some(x => x.varenummer === v.varenummer)).length;
+    for (const v of r.varer){ const i = state.varer.findIndex(x => x.varenummer === v.varenummer); if (i>=0) state.varer[i] = v; else state.varer.push(v); }
+    state.import = null; state.ui.kilde = navn; logg(`Importerede emballagetabel ${navn}: ${r.varer.length} varer (${nye} nye)`); gem(); render(); toast(`${r.varer.length} varer importeret`); return;
+  }
+  const m = detectSalg(parsed.headers);
+  /* Importér direkte kun når varenummer, antal og periode (dato eller kvartalskolonner) er genkendt. Ellers spørger vi. */
+  const klar = !!(m.nr && (m.q || (m.antal && m.dato)));
+  state.import = { navn, headers:parsed.headers, rows:parsed.rows, auto:{ nr:m.nr, antal: m.antal || (m.q ? 'kvartalskolonner' : null) },
+    mapping:{ nr:m.nr, antal:m.antal, navn:m.navn, q:m.q, periode: m.dato ? 'col:' + m.dato : null }, trin: klar ? 'klar' : 'mapping' };
+  if (klar) anvendImport(); else render();
+}
+function anvendImport(){
+  const imp = state.import, mp = imp.mapping, per0 = mp.periode || '';
+  const m = { nr:mp.nr, antal:mp.antal, navn:mp.navn, q:mp.q || null, dato: per0.startsWith('col:') ? per0.slice(4) : null };
+  const kvartal = per0.startsWith('q:') ? Number(per0.slice(2)) : undefined;
+  const r = anvendSalg(state.varer, imp.rows, m, { aar:state.aar, kvartal });
+  const per = r.kvartaler.map(q => 'Q' + (q + 1)).join(', ');
+  const flertal = (n, en, flere) => `${n} ${n === 1 ? en : flere}`;
+  const skip = [r.andetAar ? `${flertal(r.andetAar, 'række', 'rækker')} fra et andet år end ${state.aar} er sprunget over.` : '', r.udenDato ? `${flertal(r.udenDato, 'række', 'rækker')} uden gyldig dato er sprunget over.` : ''].filter(Boolean).join(' ');
+  logg(`Importerede salgseksport ${imp.navn}: ${r.kendte.length} varer opdateret${per ? ` (${per} ${state.aar})` : ''}, ${r.ukendte.length} ukendte varenumre${skip ? '. ' + skip : ''}`);
+  state.ui.kilde = imp.navn;
+  if (r.ukendte.length){ imp.trin = 'ukendte'; imp.kendte = r.kendte; imp.ukendte = r.ukendte; imp.resultat = { per, skip }; }
+  else { state.import = null; toast(`${r.kendte.length} varer opdateret${per ? ` · ${per} ${state.aar}` : ''}${skip ? ' · ' + skip : ''}`); }
+  gem(); render();
+}
+/* Hostet på claude.ai: filen gives via downloads-capability (viewer bekræfter). Lokal fil: almindelig browser-download. */
+let dlNs; async function downloadsNs(){ if (dlNs !== undefined) return dlNs; try { dlNs = (window.claude && typeof window.claude.use === 'function') ? await window.claude.use('downloads') : null; } catch(e){ dlNs = null; } return dlNs; }
+async function download(navn, indhold, type){
+  const dl = await downloadsNs();
+  if (dl){ try { await dl.save({ filename: navn, data: indhold }); toast(`${navn} er gemt`); } catch(e){ toast(e && e.code === 'declined' ? 'Download afbrudt' : 'Kunne ikke gemme filen her – brug "Kopiér som tekst"'); } return; }
+  try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([indhold], { type })); a.download = navn; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); toast(`Henter ${navn} – hvis intet sker, brug "Kopiér som tekst"`); } catch(e){ toast('Download blokeret her – brug "Kopiér som tekst"'); }
+}
+async function kopier(txt, ok){ try { await navigator.clipboard.writeText(txt); toast(ok); } catch(e){ const pre = document.getElementById('csv-preview'); if (pre){ const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } toast('Markeret – tryk Ctrl/Cmd+C for at kopiere'); } }
+let toastT; function toast(msg){ let t = document.getElementById('toast'); if (!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3200); }
+const filnavn = () => `hotel-test-as_${state.ordning}_${state.aar}_${state.ui.format}.csv`;
+
+document.addEventListener('click', e => {
+  const nav = e.target.closest('[data-nav]'); if (nav){ e.preventDefault(); state.ui.page = nav.dataset.nav; state.ui.bekraeftNulstil = false; render(); window.scrollTo(0,0); return; }
+  const open = e.target.closest('[data-open]'); if (open && !e.target.closest('button,input,select,a')){ vaelgVare(open.dataset.open); return; }
+  const btn = e.target.closest('[data-action]'); if (!btn) return;
+  const a = btn.dataset.action, v = state.varer.find(x => x.varenummer === state.ui.valgt), res = beregn(state.varer);
+  if (a === 'indlaes-testdata') indlaesTestdata();
+  else if (a === 'vaelg-fil') document.getElementById('file-csv').click();
+  else if (a === 'vaelg-json') document.getElementById('file-json').click();
+  else if (a === 'annuller-import'){ state.import = null; render(); }
+  else if (a === 'anvend-mapping'){ state.import.mapping.q = null; anvendImport(); }
+  else if (a === 'eksempel-salg'){ const nr = btn.dataset.nr, el = document.getElementById('eksempel-salg-' + nr); if (!el) return; if (!state.varer.length) indlaesTestdata(); state.ui.page = 'varer'; haandterCSV(nr === '1' ? 'salgseksport-kassesystem.csv' : 'salgseksport-ukendte-kolonner.csv', el.textContent.trim()); window.scrollTo(0,0); }
+  else if (a === 'opret-nye'){ for (const u of state.import.ukendte) state.varer.push({ varenummer:u.varenummer, varenavn:u.varenavn, varekategori:'', leverandoer:'', leverandoerLand:'', privateLabel:false, producentansvar:'uafklaret', begrundelse:'', solgt:u.solgt, komponenter:[], sidstAendret:null }); logg(`Oprettede ${state.import.ukendte.length} varer fra salgseksport uden emballagedata`); state.import = null; gem(); render(); }
+  else if (a === 'tilfoej-komp' && v){ v.komponenter.push({ id:nyId(), navn:'Ny komponent', emballagetype:'primaer', materiale:'Pap', detalje:'', gram:0, antalPrSalgsenhed:1, type:'husholdning', kilde:'estimat', dato:'', miljoegraduering:'ukendt' }); v.sidstAendret = new Date().toISOString(); logg(`${v.varenummer}: tilføjede komponent`); gem(); render(); const inp = document.querySelector('tbody tr:last-child input[data-felt="navn"]'); if (inp){ inp.focus(); inp.select(); } }
+  else if (a === 'fjern-komp' && v){ const k = v.komponenter.find(x => x.id === btn.dataset.id); v.komponenter = v.komponenter.filter(x => x.id !== btn.dataset.id); v.sidstAendret = new Date().toISOString(); logg(`${v.varenummer}: fjernede komponent "${k ? k.navn : ''}"`); gem(); render(); }
+  else if (a === 'download-csv') download(filnavn(), eksportCSV(res, state.ordning, state.ui.format), 'text/csv;charset=utf-8');
+  else if (a === 'kopier-csv') kopier(eksportCSV(res, state.ordning, state.ui.format).replace('﻿',''), 'Eksportfilen er kopieret');
+  else if (a === 'download-doc') download(`hotel-test-as_vareliste_${state.aar}.csv`, dokumentationCSV(state.varer, res), 'text/csv;charset=utf-8');
+  else if (a === 'eksport-backup') download(`emballagemappen_sikkerhedskopi_${new Date().toISOString().slice(0,10)}.json`, JSON.stringify({ version:'v0', eksporteret:new Date().toISOString(), ordning:state.ordning, aar:state.aar, varer:state.varer, log:state.log }, null, 2), 'application/json');
+  else if (a === 'nulstil'){ if (!state.ui.bekraeftNulstil){ state.ui.bekraeftNulstil = true; render(); return; } state.varer = []; state.log = []; state.import = null; state.ui.bekraeftNulstil = false; state.ui.kilde = null; try { localStorage.removeItem(KEY); } catch(e){} render(); toast('Mappen er nulstillet'); }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'soeg'){ state.ui.soeg = t.value; const main = document.getElementById('main'); const pos = t.selectionStart; main.innerHTML = visVarer(beregn(state.varer)); const s = document.getElementById('soeg'); s.focus(); s.setSelectionRange(pos,pos); return; }
+  const v = state.varer.find(x => x.varenummer === state.ui.valgt); if (!v) return;
+  const tr = t.closest('tr[data-komp]');
+  if (tr && t.dataset.felt){ const k = v.komponenter.find(x => x.id === tr.dataset.komp); if (!k) return; const f = t.dataset.felt; k[f] = (f === 'gram' || f === 'antalPrSalgsenhed') ? (toNumber(t.value) || 0) : t.value; liveCalc(v); }
+  else if (t.dataset.vq !== undefined){ v.solgt[Number(t.dataset.vq)] = toNumber(t.value) || 0; liveCalc(v); }
+  else if (t.dataset.vfelt && t.type !== 'radio'){ v[t.dataset.vfelt] = t.value; }
+});
+document.addEventListener('focusin', e => { if (e.target.matches('input,select,textarea')) e.target.dataset.orig = e.target.value; });
+function liveCalc(v){ const b = beregnVare(v), s = solgtTotal(v); const c = document.getElementById('calc'); if (c) c.innerHTML = visCalc(v, b, s, erProducent(v)); const f = document.getElementById('komp-foot'); if (f) f.innerHTML = `<div>${v.komponenter.length} komponenter</div><div>Emballage pr. stk. <b style="color:var(--text)">${kg(b.gramPrStk)} g</b></div>`; }
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.ui){ const k = t.dataset.ui; if (k === 'ordning'){ state.ordning = t.value; logg(`Skiftede ordning til ${ORDNINGER[t.value]}`); gem(); } else if (k === 'kunMangler') state.ui.kunMangler = t.checked; else state.ui[k] = t.value; render(); return; }
+  if (t.dataset.map){ state.import.mapping[t.dataset.map] = t.value || null; render(); return; }
+  const v = state.varer.find(x => x.varenummer === state.ui.valgt); if (!v) return;
+  const tr = t.closest('tr[data-komp]');
+  const orig = t.dataset.orig;
+  if (tr && t.dataset.felt){ const k = v.komponenter.find(x => x.id === tr.dataset.komp); if (!k) return; const f = t.dataset.felt; const tal = (f === 'gram' || f === 'antalPrSalgsenhed'); k[f] = tal ? (toNumber(t.value) || 0) : t.value; const before = orig === undefined ? '' : (tal ? String(toNumber(orig) || 0) : orig); const after = String(k[f]); if (before !== after) logg(`${v.varenummer}: ${k.navn} · ${f} ${tal ? before.replace('.',',') : (before || '–')} → ${tal ? after.replace('.',',') : after}`); }
+  else if (t.dataset.vq !== undefined){ v.solgt[Number(t.dataset.vq)] = toNumber(t.value) || 0; logg(`${v.varenummer}: solgt Q${Number(t.dataset.vq)+1} → ${v.solgt[Number(t.dataset.vq)]}`); }
+  else if (t.dataset.vfelt){ const f = t.dataset.vfelt; const before = t.type === 'radio' ? v[f] : orig; v[f] = t.value; if (f === 'producentansvar') logg(`${v.varenummer}: producentansvar ${PA_KORT[before]||before} → ${PA_KORT[t.value]}`); else if (f === 'begrundelse') logg(`${v.varenummer}: begrundelse opdateret`); else if (String(before) !== String(t.value)) logg(`${v.varenummer}: ${f} ændret`); }
+  else return;
+  t.dataset.orig = t.value; v.sidstAendret = new Date().toISOString(); gem(); render();
+});
+document.getElementById('file-csv').addEventListener('change', e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => haandterCSV(f.name, r.result); r.readAsText(f, 'utf-8'); e.target.value = ''; });
+document.getElementById('file-json').addEventListener('change', e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { const s = JSON.parse(r.result); if (!Array.isArray(s.varer)) throw new Error('Ikke en sikkerhedskopi'); state.varer = s.varer; state.log = s.log || []; state.ordning = s.ordning || 'vana'; state.aar = s.aar || 2026; logg(`Indlæste sikkerhedskopi ${f.name}`); gem(); render(); toast(`${s.varer.length} varer indlæst fra sikkerhedskopi`); } catch(err){ toast('Filen er ikke en gyldig sikkerhedskopi'); } }; r.readAsText(f, 'utf-8'); e.target.value = ''; });
+document.addEventListener('dragover', e => { const d = e.target.closest('#drop'); if (d){ e.preventDefault(); d.classList.add('over'); } });
+document.addEventListener('dragleave', e => { const d = e.target.closest('#drop'); if (d) d.classList.remove('over'); });
+document.addEventListener('drop', e => { const d = e.target.closest('#drop'); if (!d) return; e.preventDefault(); d.classList.remove('over'); const f = e.dataTransfer.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => haandterCSV(f.name, r.result); r.readAsText(f, 'utf-8'); });
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('tr.row')) vaelgVare(e.target.dataset.open); });
+
+hent();
+const hash = location.hash.replace('#','');
+if (['varer','beregning','test'].includes(hash)) state.ui.page = hash;
+render();
+})();
+</script>
+
+</body></html>
